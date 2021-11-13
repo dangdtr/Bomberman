@@ -13,8 +13,11 @@ import uet.oop.bomberman.entities.Grass;
 import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class BombermanGame extends Application {
     
@@ -64,6 +67,25 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
+
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                Entity object;
+                if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
+                    object = new Wall(i, j, Sprite.wall.getFxImage());
+                }
+                else {
+                    object = new Grass(i, j, Sprite.grass.getFxImage());
+                }
+                stillObjects.add(object);
+            }
+        }
+    }
+
+    public void createMap(int level) throws FileNotFoundException {
+        String path = String.format("res/levels/Level%d.txt", level);
+//        Scanner scanner = new Scanner(new File(path));
+
 
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
