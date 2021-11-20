@@ -11,4 +11,13 @@ public class Brick extends Entity {
     public void update() {
 
     }
+<<<<<<< HEAD
 }
+=======
+
+    @Override
+    public void render() {
+
+    }
+}
+>>>>>>> 073e818b7a48388044b320811014b0f6b2961742
