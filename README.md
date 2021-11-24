@@ -1,3 +1,13 @@
+# Installation
+* Add `VM options`: `Run` -> `Edit Configurations...` 
+-> `Modify options` -> `Add VM options`:
+  >--module-path /path/to/javafx-sdk-17/lib 
+  >--add-modules
+  >javafx.controls
+  >--add-modules
+  >javafx.fxml
+* `Run` -> `Run BombermanGame`
+
 # Bài tập lớn OOP - Bomberman Game
 
 Trong bài tập lớn này, nhiệm vụ của bạn là viết một phiên bản Java mô phỏng lại trò chơi [Bomberman](https://www.youtube.com/watch?v=mKIOVwqgSXM) kinh điển của NES.
