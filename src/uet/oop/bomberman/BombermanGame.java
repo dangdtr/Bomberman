@@ -7,18 +7,18 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class BombermanGame extends Application {
 
@@ -69,8 +69,6 @@ public class BombermanGame extends Application {
                         bomberman.inputKeyHandle(event);
                     }
                 });
-
-
                 render();
                 update();
             }
@@ -80,7 +78,6 @@ public class BombermanGame extends Application {
         createMap(1);
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-//        entities.add(bomberman);
     }
 
     public void createMap() {

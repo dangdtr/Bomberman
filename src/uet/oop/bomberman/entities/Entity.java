@@ -16,7 +16,13 @@ public abstract class Entity {
     protected int y;
 
     protected Image img;
+    protected Sprite sprite;
+    protected int _animate = 0;
+    protected final int MAX_ANIMATE = 7500;
 
+    protected void animate() {
+        if(_animate < MAX_ANIMATE) _animate++; else _animate = 0;
+    }
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
     public Entity( int xUnit, int yUnit, Image img) {
         this.x = xUnit * Sprite.SCALED_SIZE;
@@ -28,6 +34,4 @@ public abstract class Entity {
         gc.drawImage(img, x, y);
     }
     public abstract void update();
-
-//    public abstract void inputKeyHandle(KeyEvent event);
 }
