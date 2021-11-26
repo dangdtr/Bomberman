@@ -1,10 +1,10 @@
 package uet.oop.bomberman.maps;
 
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.entities.statics.destroyable.Brick;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.statics.Grass;
 import uet.oop.bomberman.entities.statics.Wall;
+import uet.oop.bomberman.entities.statics.destroyable.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.IOException;
@@ -14,27 +14,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Map {
-    private static int gameLevel;
+public class GameMap {
+    private static int gameLevel = 1;
 
-    public Map() {
-        gameLevel = 1;
-    }
+    // cheat qua
+    private static final char[][] map = new char[13][31];
 
     public static int getGameLevel() {
         return gameLevel;
     }
 
-    public static void setGameLevel(int gameLevel) {
-        Map.gameLevel = gameLevel;
+    public void setGameLevel(int gameLevel) {
+        GameMap.gameLevel = gameLevel;
     }
 
-    public void createMap() throws IOException {
+    public static void createMap() throws IOException {
         //TODO: cập nhật level rồi tạo
         createMap(getGameLevel());
     }
 
-    public void createMap(int level) throws IOException {
+    public static void createMap(int level) throws IOException {
         // xu li file
         String path = String.format("res/levels/Level%d.txt", level);
         Path filePath = Paths.get(path);
@@ -55,24 +54,27 @@ public class Map {
         }
 
         // xu li n dong tiep theo
-        char[][] map = new char[row][col];
         int i = -1;
         while (reader.hasNext()) {
             String line1 = reader.nextLine();
             for (int t = 0; t < line1.length(); t++) {
+
+                // chưa đọc vào mảng map
                 Entity object;
 
                 if (line1.charAt(t) == '#') {
                     object = new Wall(t, i, Sprite.wall.getFxImage());
                 } else if (line1.charAt(t) == '*') {
-                    System.out.println();
                     object = new Brick(t, i, Sprite.brick.getFxImage());
                 } else {
                     object = new Grass(t, i, Sprite.grass.getFxImage());
+
                 }
                 BombermanGame.stillObjects.add(object);
+
             }
             i++;
         }
     }
+
 }
