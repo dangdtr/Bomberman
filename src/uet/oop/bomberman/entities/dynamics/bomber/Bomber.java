@@ -1,8 +1,9 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.dynamics.bomber;
 
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Entity {

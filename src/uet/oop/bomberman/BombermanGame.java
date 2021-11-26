@@ -10,6 +10,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
+import uet.oop.bomberman.entities.statics.Brick;
+import uet.oop.bomberman.entities.statics.Grass;
+import uet.oop.bomberman.entities.statics.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.*;
@@ -28,7 +32,11 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
     private final List<Entity> entities = new ArrayList<>();
-    private final List<Entity> stillObjects = new ArrayList<>();
+
+//    private final List<Entity> stillObjects = new ArrayList<>();
+    // tạm thời để public static
+    public static final List<Entity> stillObjects = new ArrayList<>();
+
 
     private Bomber bomberman;
 
@@ -63,12 +71,12 @@ public class BombermanGame extends Application {
                         bomberman.inputKeyHandle(event);
                     }
                 });
-                scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        bomberman.inputKeyHandle(event);
-                    }
-                });
+//                scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+//                    @Override
+//                    public void handle(KeyEvent event) {
+//                        bomberman.inputKeyHandle(event);
+//                    }
+//                });
                 render();
                 update();
             }
