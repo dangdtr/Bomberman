@@ -1,7 +1,7 @@
 package uet.oop.bomberman.maps;
 
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.entities.statics.Brick;
+import uet.oop.bomberman.entities.statics.destroyable.Brick;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.statics.Grass;
 import uet.oop.bomberman.entities.statics.Wall;
@@ -15,6 +15,25 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Map {
+    private static int gameLevel;
+
+    public Map() {
+        gameLevel = 1;
+    }
+
+    public static int getGameLevel() {
+        return gameLevel;
+    }
+
+    public static void setGameLevel(int gameLevel) {
+        Map.gameLevel = gameLevel;
+    }
+
+    public void createMap() throws IOException {
+        //TODO: cập nhật level rồi tạo
+        createMap(getGameLevel());
+    }
+
     public void createMap(int level) throws IOException {
         // xu li file
         String path = String.format("res/levels/Level%d.txt", level);
@@ -42,6 +61,7 @@ public class Map {
             String line1 = reader.nextLine();
             for (int t = 0; t < line1.length(); t++) {
                 Entity object;
+
                 if (line1.charAt(t) == '#') {
                     object = new Wall(t, i, Sprite.wall.getFxImage());
                 } else if (line1.charAt(t) == '*') {
