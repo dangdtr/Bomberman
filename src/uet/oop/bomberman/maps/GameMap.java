@@ -84,7 +84,8 @@ public class GameMap {
     }
 
     public static Entity getEntity(int x, int y) {
-
-        return null;
+        Entity a = null;
+        if (map[x][y] == ' ') a = new Grass(y, x, Sprite.grass.getFxImage());
+        return a;
     }
 }

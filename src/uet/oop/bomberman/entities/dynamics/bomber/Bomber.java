@@ -74,16 +74,19 @@ public class Bomber extends Player {
                 && topBomber == topEntity && bottomBomber == bottomEntity) {
             return !(other instanceof Grass);
         }
-
-        return false;
+        if (other instanceof Grass) return false;
+        return true;
     }
 
-    private boolean canMove(int x, int y) {
-        Entity a = GameMap.getEntity(x, y);
-        if (a != null) {
-            return !this.checkCollide(a);
+    private boolean canMove(int xt, int yt) {
+        for (int c = 0; c<4; c ++){
+            int xz = ((x+xt) + c%2*11)/Sprite.DEFAULT_SIZE;
+            int yz = ((y+yt) + c/2 *12 -13) / Sprite.DEFAULT_SIZE;
+
+            Entity a = GameMap.getEntity(xz,yz);
+            if (this.checkCollide(a)) return false;
         }
-        return false;
+        return true;
     }
 
     private void chooseSprite() {
