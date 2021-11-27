@@ -72,8 +72,7 @@ public class Bomber extends Player {
 
         if (leftBomber == leftEntity && rightBomber == rightEntity
                 && topBomber == topEntity && bottomBomber == bottomEntity) {
-            if (other instanceof Grass) return false;
-            return true;
+            return !(other instanceof Grass);
         }
 
         return false;
@@ -81,8 +80,10 @@ public class Bomber extends Player {
 
     private boolean canMove(int x, int y) {
         Entity a = GameMap.getEntity(x, y);
-        if (this.checkCollide(a) == true) return false;
-        return true;
+        if (a != null) {
+            return !this.checkCollide(a);
+        }
+        return false;
     }
 
     private void chooseSprite() {
