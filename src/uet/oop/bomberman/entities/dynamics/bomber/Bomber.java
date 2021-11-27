@@ -22,16 +22,16 @@ public class Bomber extends Player {
     public void update() {
         moving = true;
         if (Keyboard.UP) {
-            if (canMove(x, y - v)) y = y - v;
+            y = y - v;
         }
         if (Keyboard.LEFT) {
-            if (canMove(x-v, y)) x = x - v;
+            x = x - v;
         }
         if (Keyboard.DOWN) {
-            if (canMove(x, y+v)) y = y + v;
+            y = y + v;
         }
         if (Keyboard.RIGHT) {
-            if (canMove(x+v, y)) x = x + v;
+            x = x + v;
         }
 
         chooseSprite();
@@ -41,55 +41,6 @@ public class Bomber extends Player {
 
     }
 
-    private boolean checkCollide(Entity other) {
-        int leftBomber = x;
-        int rightBomber = x + Sprite.DEFAULT_SIZE;
-        int topBomber = y;
-        int bottomBomber = y + Sprite.DEFAULT_SIZE;
-
-        int leftEntity = other.getX();
-        int rightEntity = leftEntity + Sprite.DEFAULT_SIZE;
-        int topEntity = other.getY();
-        int bottomEntity = topEntity + Sprite.DEFAULT_SIZE;
-
-        if (rightBomber > leftEntity && rightBomber < rightEntity) {
-            if (bottomBomber > topEntity && bottomBomber < bottomEntity) return true;
-            if (topBomber > topEntity && topBomber < bottomEntity) return true;
-        }
-
-        if (leftBomber > leftEntity && leftBomber < rightEntity) {
-            if (bottomBomber > topEntity && bottomBomber < bottomEntity) return true;
-            if (topBomber > topEntity && topBomber < bottomEntity) return true;
-        }
-
-        if (rightEntity > leftBomber && rightEntity < rightBomber) {
-            if (bottomEntity > topBomber && bottomEntity < bottomBomber) return true;
-            if (topEntity > topBomber && topEntity < bottomBomber) return true;
-        }
-
-        if (leftEntity > leftBomber && leftEntity < rightBomber) {
-            if (bottomEntity > topBomber && bottomEntity < bottomBomber) return true;
-            if (topEntity > topBomber && topEntity < bottomBomber) return true;
-        }
-
-        if (leftBomber == leftEntity && rightBomber == rightEntity
-                && topBomber == topEntity && bottomBomber == bottomEntity) {
-            return !(other instanceof Grass);
-        }
-        if (other instanceof Grass) return false;
-        return true;
-    }
-
-    private boolean canMove(int xt, int yt) {
-        for (int c = 0; c<4; c ++){
-            int xz = ((x+xt) + c%2*11)/Sprite.DEFAULT_SIZE;
-            int yz = ((y+yt) + c/2 *12 -13) / Sprite.DEFAULT_SIZE;
-
-            Entity a = GameMap.getEntity(xz,yz);
-            if (this.checkCollide(a)) return false;
-        }
-        return true;
-    }
 
     private void chooseSprite() {
         if (Keyboard.UP) {
