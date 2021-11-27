@@ -7,6 +7,7 @@ import uet.oop.bomberman.modules.Keyboard;
 public class Bomber extends Player {
     private final int v = 1;
     private boolean moving = false;
+    private Sprite prevSprite = Sprite.player_right;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
@@ -24,6 +25,7 @@ public class Bomber extends Player {
 
         chooseSprite();
         animate();
+        moving = false;
         setImg(sprite.getFxImage());
 
     }
@@ -33,32 +35,36 @@ public class Bomber extends Player {
 
     private void chooseSprite() {
         if (Keyboard.UP) {
-            if (moving) {
+//            if (moving) {
                 sprite = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, _animate, _time);
-            } else {
-                sprite = Sprite.player_up;
-            }
+//            } else {
+                prevSprite = Sprite.player_up;
+//            }
         }
         if (Keyboard.LEFT) {
-            if (moving) {
+//            if (moving) {
                 sprite = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, _animate, _time);
-            } else {
-                sprite = Sprite.player_left;
-            }
+//            } else {
+            prevSprite = Sprite.player_left;
+//            }
         }
         if (Keyboard.DOWN) {
-            if (moving) {
+//            if (moving) {
                 sprite = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, _animate, _time);
-            } else {
-                sprite = Sprite.player_down;
-            }
+//            } else {
+            prevSprite = Sprite.player_down;
+//            }
         }
         if (Keyboard.RIGHT) {
-            if (moving) {
+//            if (moving) {
                 sprite = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, _animate, _time);
-            } else {
-                sprite = Sprite.player_right;
-            }
+//            } else {
+            prevSprite = Sprite.player_right;
+//            }
+        }
+
+        if(!Keyboard.UP && !Keyboard.LEFT && !Keyboard.DOWN && !Keyboard.RIGHT) {
+            sprite = prevSprite;
         }
 
     }
