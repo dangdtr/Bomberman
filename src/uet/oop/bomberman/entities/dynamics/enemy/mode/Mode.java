@@ -1,4 +1,6 @@
 package uet.oop.bomberman.entities.dynamics.enemy.mode;
 
-public interface Mode {
+public class Mode {
+    public static boolean UP, LEFT, RIGHT, DOWN;
+
 }

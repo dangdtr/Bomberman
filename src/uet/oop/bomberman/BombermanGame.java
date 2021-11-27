@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
@@ -17,6 +18,7 @@ import uet.oop.bomberman.modules.Keyboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 
@@ -27,16 +29,22 @@ public class BombermanGame extends Application {
 
     private GraphicsContext gc;
     private Canvas canvas;
+
     private final List<Entity> entities = new ArrayList<>();
 
     //    private final List<Entity> stillObjects = new ArrayList<>();
     // tạm thời để public static
     public static final List<Entity> stillObjects = new ArrayList<>();
 
+    // từ tọa độ có thê lấy được Entity
+//    public static Hashtable<Integer, Entity> brickList = new Hashtable<>();
 
     private final Keyboard keyboard = new Keyboard();// = new Keyboard();
+    private final Collisions collisions = new Collisions();
 
     private Bomber bomberman;
+//    private Bomber bomberman2;
+
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -64,90 +72,41 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        keyboard.setInputKeyEvent(event);
-                    }
-                });
 
-                scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        keyboard.setInputKeyEvent(event);
-                    }
-                });
 
                 update();
                 render();
             }
         };
         timer.start();
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                keyboard.setInputKeyEvent(event);
+            }
+        });
 
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                keyboard.setInputKeyEvent(event);
+            }
+        });
         GameMap.createMap();
 
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+//        bomberman2 = new Bomber(1, 1, Sprite.player_right.getFxImage());
+
     }
 
-//    public void createMap() {
-//        for (int i = 0; i < WIDTH; i++) {
-//            for (int j = 0; j < HEIGHT; j++) {
-//                Entity object;
-//                if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
-//                    object = new Wall(i, j, Sprite.wall.getFxImage());
-//                } else {
-//                    object = new Grass(i, j, Sprite.grass.getFxImage());
-//                }
-//                stillObjects.add(object);
-//            }
-//        }
-//    }
-//
-//    public void createMap(int level) throws IOException {
-//        // xu li file
-//        String path = String.format("res/levels/Level%d.txt", level);
-//        Path filePath = Paths.get(path);
-//        Scanner reader = new Scanner(filePath);
-//        List<Integer> integers = new ArrayList<>();
-//
-//        // doc du lieu tung dong
-//        int line = 1;
-//        int levels = 0, row = 0, col = 0;
-//
-//        // xu li dong dau tien
-//        char[] data = new char[3];
-//        while (line == 1) {
-//            levels = Integer.parseInt(reader.next());
-//            row = Integer.parseInt(reader.next());
-//            col = Integer.parseInt(reader.next());
-//            line++;
-//        }
-//
-//        // xu li n dong tiep theo
-//        char[][] map = new char[row][col];
-//        int i = -1;
-//        while (reader.hasNext()) {
-//            String line1 = reader.nextLine();
-//            for (int t = 0; t < line1.length(); t++) {
-//                Entity object;
-//                if (line1.charAt(t) == '#') {
-//                    object = new Wall(t, i, Sprite.wall.getFxImage());
-//                } else if (line1.charAt(t) == '*') {
-//                    object = new Brick(t, i, Sprite.brick.getFxImage());
-//                } else {
-//                    object = new Grass(t, i, Sprite.grass.getFxImage());
-//                }
-//                stillObjects.add(object);
-//            }
-//            i++;
-//        }
-//    }
 
     public void update() {
         entities.forEach(Entity::update);
 
         bomberman.update();
+//        bomberman2.update();
+//        System.out.println(collisions.checkCollision(bomberman, bomberman2));
     }
 
     public void render() {
@@ -155,5 +114,7 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
         bomberman.render(gc);
+//        bomberman2.render(gc);
+
     }
 }
