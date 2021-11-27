@@ -1,11 +1,14 @@
 package uet.oop.bomberman.entities.dynamics.bomber;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.statics.Grass;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.maps.GameMap;
 import uet.oop.bomberman.modules.Keyboard;
 
 public class Bomber extends Player {
-    private final int v = 1;
+    private final int v = 2;
     private boolean moving = false;
 
     public Bomber(int x, int y, Image img) {
@@ -17,10 +20,18 @@ public class Bomber extends Player {
     @Override
     public void update() {
         moving = true;
-        if (Keyboard.UP) y = y - v;
-        if (Keyboard.LEFT) x = x - v;
-        if (Keyboard.DOWN) y = y + v;
-        if (Keyboard.RIGHT) x = x + v;
+        if (Keyboard.UP) {
+            if (canMove(x, y - v)) y = y - v;
+        }
+        if (Keyboard.LEFT) {
+            if (canMove(x-v, y)) x = x - v;
+        }
+        if (Keyboard.DOWN) {
+            if (canMove(x, y+v)) y = y + v;
+        }
+        if (Keyboard.RIGHT) {
+            if (canMove(x+v, y)) x = x + v;
+        }
 
         chooseSprite();
         animate();
@@ -28,7 +39,50 @@ public class Bomber extends Player {
 
     }
 
-    private void canMove() {
+    private boolean checkCollide(Entity other) {
+        int leftBomber = x;
+        int rightBomber = x + Sprite.DEFAULT_SIZE;
+        int topBomber = y;
+        int bottomBomber = y + Sprite.DEFAULT_SIZE;
+
+        int leftEntity = other.getX();
+        int rightEntity = leftEntity + Sprite.DEFAULT_SIZE;
+        int topEntity = other.getY();
+        int bottomEntity = topEntity + Sprite.DEFAULT_SIZE;
+
+        if (rightBomber > leftEntity && rightBomber < rightEntity) {
+            if (bottomBomber > topEntity && bottomBomber < bottomEntity) return true;
+            if (topBomber > topEntity && topBomber < bottomEntity) return true;
+        }
+
+        if (leftBomber > leftEntity && leftBomber < rightEntity) {
+            if (bottomBomber > topEntity && bottomBomber < bottomEntity) return true;
+            if (topBomber > topEntity && topBomber < bottomEntity) return true;
+        }
+
+        if (rightEntity > leftBomber && rightEntity < rightBomber) {
+            if (bottomEntity > topBomber && bottomEntity < bottomBomber) return true;
+            if (topEntity > topBomber && topEntity < bottomBomber) return true;
+        }
+
+        if (leftEntity > leftBomber && leftEntity < rightBomber) {
+            if (bottomEntity > topBomber && bottomEntity < bottomBomber) return true;
+            if (topEntity > topBomber && topEntity < bottomBomber) return true;
+        }
+
+        if (leftBomber == leftEntity && rightBomber == rightEntity
+                && topBomber == topEntity && bottomBomber == bottomEntity) {
+            if (other instanceof Grass) return false;
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean canMove(int x, int y) {
+        Entity a = GameMap.getEntity(x, y);
+        if (this.checkCollide(a) == true) return false;
+        return true;
     }
 
     private void chooseSprite() {

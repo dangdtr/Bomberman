@@ -7,6 +7,7 @@ import uet.oop.bomberman.entities.statics.Wall;
 import uet.oop.bomberman.entities.statics.destroyable.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,9 +17,10 @@ import java.util.Scanner;
 
 public class GameMap {
     private static int gameLevel = 1;
-
     // cheat qua
-    private static final char[][] map = new char[13][31];
+    public static char[][] map;
+    private static int height = 20;
+    private static int width = 20;
 
     public static int getGameLevel() {
         return gameLevel;
@@ -33,48 +35,56 @@ public class GameMap {
         createMap(getGameLevel());
     }
 
-    public static void createMap(int level) throws IOException {
-        // xu li file
-        String path = String.format("res/levels/Level%d.txt", level);
-        Path filePath = Paths.get(path);
-        Scanner reader = new Scanner(filePath);
-        List<Integer> integers = new ArrayList<>();
-
-        // doc du lieu tung dong
-        int line = 1;
-        int levels = 0, row = 0, col = 0;
-
-        // xu li dong dau tien
-        char[] data = new char[3];
-        while (line == 1) {
-            levels = Integer.parseInt(reader.next());
-            row = Integer.parseInt(reader.next());
-            col = Integer.parseInt(reader.next());
-            line++;
-        }
-
-        // xu li n dong tiep theo
-        int i = -1;
-        while (reader.hasNext()) {
-            String line1 = reader.nextLine();
-            for (int t = 0; t < line1.length(); t++) {
-
-                // chưa đọc vào mảng map
-                Entity object;
-
-                if (line1.charAt(t) == '#') {
-                    object = new Wall(t, i, Sprite.wall.getFxImage());
-                } else if (line1.charAt(t) == '*') {
-                    object = new Brick(t, i, Sprite.brick.getFxImage());
-                } else {
-                    object = new Grass(t, i, Sprite.grass.getFxImage());
-
+    public static void createMap(int gameLevel) throws IOException {
+        fileLoad(gameLevel);
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                char c = map[i][j];
+                Entity obj;
+                switch (c) {
+                    case '#':
+                        obj = new Wall(j, i, Sprite.wall.getFxImage());
+                        BombermanGame.stillObjects.add(obj);
+                        break;
+                    case '*':
+                        obj = new Brick(j, i, Sprite.brick.getFxImage());
+                        BombermanGame.stillObjects.add(obj);
+                        break;
+                    default:
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        BombermanGame.stillObjects.add(obj);
+                        break;
                 }
-                BombermanGame.stillObjects.add(object);
-
             }
-            i++;
         }
+
     }
 
+    public static void fileLoad(int gameLevel) throws IOException {
+        String path = String.format("res/levels/Level%d.txt", gameLevel);
+        FileReader filePath = new FileReader(path);
+        Scanner reader = new Scanner(filePath);
+
+        int level = reader.nextInt();
+        height = reader.nextInt();
+        width = reader.nextInt();
+
+        map = new char[height][width];
+        reader.nextLine();
+
+        for (int i = 0; i < height; i++) {
+            String line = reader.nextLine();
+            for (int j = 0; j < width; j++) {
+                map[i][j] = line.charAt(j);
+            }
+        }
+
+        reader.close();
+        filePath.close();
+    }
+
+    public static Entity getEntity(int x, int y) {
+
+        return null;
+    }
 }
