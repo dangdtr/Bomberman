@@ -54,7 +54,7 @@ public class Bomber extends Player {
 //            if (moving) {
                 sprite = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, _animate, _time);
 //            } else {
-            prevSprite = Sprite.player_left;
+                prevSprite = Sprite.player_left;
 //            }
         }
         if (Keyboard.DOWN) {
