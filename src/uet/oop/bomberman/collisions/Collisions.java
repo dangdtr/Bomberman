@@ -5,7 +5,7 @@ import uet.oop.bomberman.graphics.Sprite;
 
 
 public class Collisions {
-    public boolean checkCollision(Entity A, Entity B) {
+    public static boolean checkCollision(Entity A, Entity B) {
         int leftA, leftB;
         int rightA, rightB;
         int topA, topB;
@@ -24,10 +24,6 @@ public class Collisions {
         if (!((bottomA <= topB) || (topA >= bottomB) || (rightA <= leftB) || (leftA >= rightB))) {
             return true;
         }
-//        if (((bottomA <= topB) || (topA >= bottomB) || (rightA <= leftB) || (leftA >= rightB)) == false) {
-//            return true;
-//        }
-
 
         return false;
     }

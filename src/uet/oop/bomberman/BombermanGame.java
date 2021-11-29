@@ -36,14 +36,14 @@ public class BombermanGame extends Application {
     // tạm thời để public static
     public static final List<Entity> stillObjects = new ArrayList<>();
 
-    // từ tọa độ có thê lấy được Entity
-//    public static Hashtable<Integer, Entity> brickList = new Hashtable<>();
+    // từ tọa độ có thê lấy được Entity Brick
+    public static Hashtable<Integer, Entity> brickList = new Hashtable<>();
 
     private final Keyboard keyboard = new Keyboard();// = new Keyboard();
-    private final Collisions collisions = new Collisions();
+//    private final Collisions collisions = new Collisions();
 
     private Bomber bomberman;
-//    private Bomber bomberman2;
+    private Bomber bomberman2;
 
 
     public static void main(String[] args) {
@@ -72,8 +72,6 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-
-
                 update();
                 render();
             }
@@ -96,7 +94,7 @@ public class BombermanGame extends Application {
 
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-//        bomberman2 = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        bomberman2 = new Bomber(1, 1, Sprite.player_right.getFxImage());
 
     }
 
@@ -105,8 +103,17 @@ public class BombermanGame extends Application {
         entities.forEach(Entity::update);
 
         bomberman.update();
+
+        //nghiên cứ cái bảng tra cứ brick
+//        for (Integer value : GameMap.getBrickSet()) {
+//            if (Collisions.checkCollision(bomberman, brickList.get(value))) {
+//                //System.out.println("_");
+//                brickList.remove(value);
+//            }
+////            brickList.get(value).update();
+//        }
 //        bomberman2.update();
-//        System.out.println(collisions.checkCollision(bomberman, bomberman2));
+//        System.out.println(Collisions.checkCollision(bomberman, bomberman2));
     }
 
     public void render() {
@@ -114,7 +121,12 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
         bomberman.render(gc);
-//        bomberman2.render(gc);
+
+        // bảng brick
+        for (Integer value : GameMap.getBrickSet()) {
+            brickList.get(value).render(gc);
+        }
+                bomberman2.render(gc);
 
     }
 }

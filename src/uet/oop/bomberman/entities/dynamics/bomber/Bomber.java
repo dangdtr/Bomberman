@@ -17,12 +17,11 @@ public class Bomber extends Player {
 
 
     public void render(GraphicsContext gc) {
-        gc.drawImage(img, x+3, y);
+        gc.drawImage(img, x , y);
     }
 
     @Override
     public void update() {
-//        chooseSprite();
 
         calculateMove();
         chooseSprite();
@@ -40,19 +39,16 @@ public class Bomber extends Player {
             if (upable(x, y)) {
                 y = y - VELOCITY;
             }
-//            Keyboard.UP = false;
         }
         if (Keyboard.LEFT) {
             if (leftable(x, y)) {
                 x = x - VELOCITY;
             }
-//            Keyboard.LEFT = false;
         }
         if (Keyboard.DOWN) {
             if (downable(x, y)) {
                 y = y + VELOCITY;
             }
-//            Keyboard.DOWN = false;
 
         }
         if (Keyboard.RIGHT) {
@@ -62,21 +58,6 @@ public class Bomber extends Player {
             }
 
         }
-//        if ((x / Sprite.SCALED_SIZE + 1) * Sprite.SCALED_SIZE - pixel < x &&
-//                x < (x / Sprite.SCALED_SIZE + 1) * Sprite.SCALED_SIZE + pixel) {
-//            x = (x / Sprite.SCALED_SIZE + 1) * Sprite.SCALED_SIZE;
-//        } else if ((x / Sprite.SCALED_SIZE) * Sprite.SCALED_SIZE - pixel< x + Sprite.SCALED_SIZE &&
-//                x + Sprite.SCALED_SIZE < (x / Sprite.SCALED_SIZE) * Sprite.SCALED_SIZE + pixel) {
-//            x = (x / Sprite.SCALED_SIZE - 1) * Sprite.SCALED_SIZE;
-//        }
-//        if ((y / Sprite.SCALED_SIZE + 1) * Sprite.SCALED_SIZE - pixel < y &&
-//                y < (y / Sprite.SCALED_SIZE + 1) * Sprite.SCALED_SIZE + pixel) {
-//            y = (y / Sprite.SCALED_SIZE + 1) * Sprite.SCALED_SIZE;
-//        } else if ((y / Sprite.SCALED_SIZE) * Sprite.SCALED_SIZE - pixel < y + Sprite.SCALED_SIZE &&
-//                y + Sprite.SCALED_SIZE < (y / Sprite.SCALED_SIZE) * Sprite.SCALED_SIZE + pixel) {
-//            y = (y / Sprite.SCALED_SIZE - 1) * Sprite.SCALED_SIZE;
-//        }
-
     }
 
 

@@ -41,6 +41,7 @@ public class GameMap {
             for (int j = 0; j < widthMap; j++) {
 //                System.out.print(map[i][j]);
                 char c = map[i][j];
+                System.out.print(c + "(" + i +"," +j +"); ");
                 Entity obj;
                 switch (c) {
                     case '#':
@@ -50,7 +51,7 @@ public class GameMap {
                     case '*':
                         obj = new Brick(j, i, Sprite.brick.getFxImage());
 //                        BombermanGame.stillObjects.add(obj);
-//                        BombermanGame.brickList.put(generateKey(j, i), obj);
+                        BombermanGame.brickList.put(generateKey(j, i), obj);
 
                         BombermanGame.stillObjects.add( new Grass(j, i, Sprite.grass.getFxImage()));
                         break;
@@ -60,6 +61,7 @@ public class GameMap {
                         break;
                 }
             }
+            System.out.println();
         }
 
     }
@@ -87,13 +89,14 @@ public class GameMap {
         filePath.close();
     }
 
-    // support for hashtable brickList
-//    public static int generateKey(int x, int y) {
-//        return x * 100 + y;
-//    }
-//    public static Set<Integer> getBrickSet() {
-//        return BombermanGame.brickList.keySet();
-//    }
+    // support for hashtable brickList// khá tệ
+    public static int generateKey(int x, int y) {
+        return x * 100 + y;
+    }
+    public static Set<Integer> getBrickSet() {
+        return BombermanGame.brickList.keySet();
+    }
+    //
 
     public static char[][] getMap() {
         return map;
