@@ -10,6 +10,8 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
 import uet.oop.bomberman.modules.Keyboard;
 
+import java.io.IOException;
+
 public class Bomber extends Player {
     private final int VELOCITY = 2;
     private Sprite prevSprite = Sprite.player_right;
@@ -19,16 +21,22 @@ public class Bomber extends Player {
         sprite = Sprite.player_right;
     }
 
-    @Override
-    public void kill() {
-
+    public void resetBomber() throws IOException {
+        img = Sprite.player_right.getFxImage();
+        moving = false;
+        alive = true;
+        GameMap.initMap();
+        GameMap.createMap(1);
     }
 
     @Override
-    protected void afterKill() {
+    public void kill() {}
+
+    @Override
+    protected void afterKill() throws IOException {
         if (_time > 0) _time--;
         if (_time == 0) {
-            GameMap.entityList.remove(this);
+            resetBomber();
         }
     }
 
@@ -37,7 +45,7 @@ public class Bomber extends Player {
     }
 
     @Override
-    public void update() {
+    public void update() throws IOException {
         if (!alive) {
             sprite = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, _animate, _time);
             afterKill();
@@ -51,24 +59,26 @@ public class Bomber extends Player {
     }
 
     private void calculateMove() {
-        if (Keyboard.UP) {
-            if (upable(x, y)) {
-                y = y - VELOCITY;
+        if (alive) {
+            if (Keyboard.UP) {
+                if (upable(x, y)) {
+                    y = y - VELOCITY;
+                }
             }
-        }
-        if (Keyboard.LEFT) {
-            if (leftable(x, y)) {
-                x = x - VELOCITY;
+            if (Keyboard.LEFT) {
+                if (leftable(x, y)) {
+                    x = x - VELOCITY;
+                }
             }
-        }
-        if (Keyboard.DOWN) {
-            if (downable(x, y)) {
-                y = y + VELOCITY;
+            if (Keyboard.DOWN) {
+                if (downable(x, y)) {
+                    y = y + VELOCITY;
+                }
             }
-        }
-        if (Keyboard.RIGHT) {
-            if (rightable(x, y)) {
-                x = x + VELOCITY;
+            if (Keyboard.RIGHT) {
+                if (rightable(x, y)) {
+                    x = x + VELOCITY;
+                }
             }
         }
     }

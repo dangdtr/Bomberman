@@ -7,6 +7,8 @@ import uet.oop.bomberman.entities.statics.destroyable.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
 
+import java.io.IOException;
+
 public abstract class DynamicEntity extends Entity {
     protected int _animate = 0;
     protected int _time = 36;
@@ -83,7 +85,7 @@ public abstract class DynamicEntity extends Entity {
     }
     public abstract void kill();
 
-    protected abstract void afterKill();
+    protected abstract void afterKill() throws IOException;
 
     protected void animate() {
         if (_animate < MAX_ANIMATE) _animate++;

@@ -10,6 +10,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.dynamics.DynamicEntity;
+import uet.oop.bomberman.entities.dynamics.bomb.Bomb;
 import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
@@ -25,12 +27,8 @@ public class BombermanGame extends Application {
 
     public static final int WIDTH = 20;
     public static final int HEIGHT = 15;
-
-    public static boolean running = true;
     private GraphicsContext gc;
     private Canvas canvas;
-    public static Queue<GameMap> gameMaps = new LinkedList<GameMap>();
-    // từ tọa độ có thê lấy được Entity Brick
 
     private final Keyboard keyboard = new Keyboard();
 
@@ -38,9 +36,6 @@ public class BombermanGame extends Application {
         Application.launch(BombermanGame.class);
     }
 
-    public GameMap getGameMap() {
-        return gameMaps.peek();
-    }
     @Override
     public void start(Stage stage) throws IOException {
         // Tao Canvas
@@ -63,7 +58,11 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                update();
+                try {
+                    update();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 render();
             }
         };
@@ -83,27 +82,39 @@ public class BombermanGame extends Application {
                 keyboard.setInputKeyEvent(event);
             }
         });
-        if (gameMaps.isEmpty()) gameMaps.offer(new GameMap());
-        getGameMap().createMap();
+        GameMap.createMap();
     }
 
 
-    public void update() {
-        stillObjects.forEach(Entity::update);
-        //if (Bomber.alive) {
-            entityList.forEach(Entity::update);
-        //}
+    public void update() throws IOException {
+        if (!stillObjects.isEmpty()) {
+            for (Entity stillObject : stillObjects) {
+                if (stillObject != null) {
+                    stillObject.update();
+                }
+            }
+        }
+        if (!entityList.isEmpty()) {
+            for (DynamicEntity dynamicEntity : entityList) {
+                if (dynamicEntity != null) {
+                    dynamicEntity.update();
+                }
+            }
+        }
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        stillObjects.forEach(g -> g.render(gc));
-        //if (Bomber.alive) {
-            entityList.forEach(g -> g.render(gc));
-        //}
-        for (Integer value : GameMap.getBrickSet()) {
-            brickList.get(value).render(gc);
+        for (Entity stillObject : stillObjects) {
+            stillObject.render(gc);
+        }
+        for (DynamicEntity g : entityList) {
+            g.render(gc);
+        }
+        if (!brickList.isEmpty()) {
+            for (Integer value : GameMap.getBrickSet()) {
+                brickList.get(value).render(gc);
+            }
         }
     }
 }

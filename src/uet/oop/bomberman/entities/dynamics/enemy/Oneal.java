@@ -2,11 +2,14 @@ package uet.oop.bomberman.entities.dynamics.enemy;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
 import uet.oop.bomberman.entities.dynamics.enemy.mode.AI2;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
+
+import java.util.Objects;
 
 
 public class Oneal extends Enemy {
@@ -24,7 +27,7 @@ public class Oneal extends Enemy {
 
     public void killBomber() {
         if (Bomber.alive) {
-            if (Collisions.checkCollision(this, gameMap.getBomber())) {
+            if (Collisions.checkCollision(this, Objects.requireNonNull(GameMap.getBomber()))) {
                 Bomber.alive = false;
             }
         }
@@ -65,7 +68,9 @@ public class Oneal extends Enemy {
 
     @Override
     public void update() {
-        killBomber();
+        if (Bomber.alive) {
+            killBomber();
+        }
         animate();
         calculateMove();
         setImg(sprite.getFxImage());

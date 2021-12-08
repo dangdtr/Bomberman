@@ -48,6 +48,13 @@ public class GameMap {
         createMap(getGameLevel());
     }
 
+    public static void initMap() {
+        entityList = new ArrayList<>();
+        stillObjects = new ArrayList<>();
+        brickList = new Hashtable<>();
+        map = new char[getHeightMap()][getWidthMap()];
+    }
+
     public static void createMap(int gameLevel) throws IOException {
         fileLoad(gameLevel);
         for (int i = 0; i < heightMap; i++) {

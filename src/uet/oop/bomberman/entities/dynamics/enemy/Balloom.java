@@ -2,10 +2,14 @@ package uet.oop.bomberman.entities.dynamics.enemy;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
 import uet.oop.bomberman.entities.dynamics.enemy.mode.RandomMode;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.maps.GameMap;
+
+import java.util.Objects;
 
 import static uet.oop.bomberman.entities.dynamics.enemy.Oneal.gameMap;
 
@@ -70,14 +74,16 @@ public class Balloom extends Enemy {
     }
     public void killBomber() {
         if (Bomber.alive) {
-            if (Collisions.checkCollision(this, gameMap.getBomber())) {
+            if (Collisions.checkCollision(this, Objects.requireNonNull(GameMap.getBomber()))) {
                 Bomber.alive = false;
             }
         }
     }
     @Override
     public void update() {
-        killBomber();
+        if (Bomber.alive) {
+            killBomber();
+        }
         animate();
         calculateMove();
         setImg(sprite.getFxImage());
