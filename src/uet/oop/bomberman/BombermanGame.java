@@ -16,8 +16,9 @@ import uet.oop.bomberman.maps.GameMap;
 import uet.oop.bomberman.modules.Keyboard;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static uet.oop.bomberman.maps.GameMap.*;
 
 
 public class BombermanGame extends Application {
@@ -25,23 +26,21 @@ public class BombermanGame extends Application {
     public static final int WIDTH = 20;
     public static final int HEIGHT = 15;
 
+    public static boolean running = true;
     private GraphicsContext gc;
     private Canvas canvas;
-    private final List<Entity> entities = new ArrayList<>();
+    public static Queue<GameMap> gameMaps = new LinkedList<GameMap>();
+    // từ tọa độ có thê lấy được Entity Brick
 
-    //    private final List<Entity> stillObjects = new ArrayList<>();
-    // tạm thời để public static
-    public static final List<Entity> stillObjects = new ArrayList<>();
-
-
-    private final Keyboard keyboard = new Keyboard();// = new Keyboard();
-
-    private Bomber bomberman;
+    private final Keyboard keyboard = new Keyboard();
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
 
+    public GameMap getGameMap() {
+        return gameMaps.peek();
+    }
     @Override
     public void start(Stage stage) throws IOException {
         // Tao Canvas
@@ -64,43 +63,47 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        keyboard.setInputKeyEvent(event);
-                    }
-                });
-
-                scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        keyboard.setInputKeyEvent(event);
-                    }
-                });
-
                 update();
                 render();
             }
         };
         timer.start();
 
-        GameMap.createMap();
 
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                keyboard.setInputKeyEvent(event);
+            }
+        });
 
-        bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                keyboard.setInputKeyEvent(event);
+            }
+        });
+        if (gameMaps.isEmpty()) gameMaps.offer(new GameMap());
+        getGameMap().createMap();
     }
 
 
     public void update() {
-        entities.forEach(Entity::update);
-
-        bomberman.update();
+        stillObjects.forEach(Entity::update);
+        //if (Bomber.alive) {
+            entityList.forEach(Entity::update);
+        //}
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
-        bomberman.render(gc);
+        //if (Bomber.alive) {
+            entityList.forEach(g -> g.render(gc));
+        //}
+        for (Integer value : GameMap.getBrickSet()) {
+            brickList.get(value).render(gc);
+        }
     }
 }

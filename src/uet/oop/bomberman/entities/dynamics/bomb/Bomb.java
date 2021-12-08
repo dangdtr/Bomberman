@@ -9,6 +9,16 @@ public class Bomb extends DynamicEntity {
     }
 
     @Override
+    public void kill() {
+
+    }
+
+    @Override
+    protected void afterKill() {
+
+    }
+
+    @Override
     public void update() {
 
     }

@@ -2,6 +2,11 @@ package uet.oop.bomberman.maps;
 
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.dynamics.DynamicEntity;
+import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
+import uet.oop.bomberman.entities.dynamics.enemy.Balloom;
+import uet.oop.bomberman.entities.dynamics.enemy.Enemy;
+import uet.oop.bomberman.entities.dynamics.enemy.Oneal;
 import uet.oop.bomberman.entities.statics.Grass;
 import uet.oop.bomberman.entities.statics.Wall;
 import uet.oop.bomberman.entities.statics.destroyable.Brick;
@@ -9,18 +14,19 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class GameMap {
     private static int gameLevel = 1;
+    private static char[][] map;// = new char[BombermanGame.HEIGHT][BombermanGame.HEIGHT];
+    private static int heightMap;
+    private static int widthMap;
+    public static List<DynamicEntity> entityList = new ArrayList<>();
+    public static List<Entity> stillObjects = new ArrayList<>();
+    public static Hashtable<Integer, Entity> brickList = new Hashtable<>();
+
     // cheat qua
-    public static char[][] map;
-    private static int height = 20;
-    private static int width = 20;
+//    private static final char[][] map = new char[13][31];
 
     public static int getGameLevel() {
         return gameLevel;
@@ -30,34 +36,60 @@ public class GameMap {
         GameMap.gameLevel = gameLevel;
     }
 
+    public static int getHeightMap() {
+        return heightMap;
+    }
+    public static int getWidthMap() {
+        return widthMap;
+    }
     public static void createMap() throws IOException {
+        System.out.println("__");
         //TODO: cập nhật level rồi tạo
         createMap(getGameLevel());
     }
 
     public static void createMap(int gameLevel) throws IOException {
         fileLoad(gameLevel);
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 0; i < heightMap; i++) {
+            for (int j = 0; j < widthMap; j++) {
                 char c = map[i][j];
                 Entity obj;
                 switch (c) {
                     case '#':
                         obj = new Wall(j, i, Sprite.wall.getFxImage());
-                        BombermanGame.stillObjects.add(obj);
+                        stillObjects.add(obj);
                         break;
                     case '*':
                         obj = new Brick(j, i, Sprite.brick.getFxImage());
-                        BombermanGame.stillObjects.add(obj);
+                        brickList.put(generateKey(j, i), obj);
+
+                        stillObjects.add( new Grass(j, i, Sprite.grass.getFxImage()));
+                        break;
+                    case 'p':
+                        Bomber bomber = new Bomber(j, i, Sprite.player_right.getFxImage());
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        entityList.add(bomber);
+                        stillObjects.add(obj);
+                        break;
+                    case '1':
+                        Balloom balloom = new Balloom(j, i, Sprite.oneal_right1.getFxImage());
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        entityList.add(balloom);
+                        stillObjects.add(obj);
+                        break;
+                    case '2':
+                        Oneal oneal = new Oneal(j, i, Sprite.oneal_right1.getFxImage());
+                        obj = new Grass(j, i, Sprite.grass.getFxImage());
+                        entityList.add(oneal);
+                        stillObjects.add(obj);
                         break;
                     default:
                         obj = new Grass(j, i, Sprite.grass.getFxImage());
-                        BombermanGame.stillObjects.add(obj);
+                        stillObjects.add(obj);
                         break;
                 }
             }
         }
-
     }
 
     public static void fileLoad(int gameLevel) throws IOException {
@@ -66,15 +98,15 @@ public class GameMap {
         Scanner reader = new Scanner(filePath);
 
         int level = reader.nextInt();
-        height = reader.nextInt();
-        width = reader.nextInt();
+        heightMap = reader.nextInt(); // 13 // x
+        widthMap = reader.nextInt();  // 31 // y
 
-        map = new char[height][width];
+        map = new char[heightMap][widthMap];
         reader.nextLine();
 
-        for (int i = 0; i < height; i++) {
+        for (int i = 0; i < heightMap; i++) {
             String line = reader.nextLine();
-            for (int j = 0; j < width; j++) {
+            for (int j = 0; j < widthMap; j++) {
                 map[i][j] = line.charAt(j);
             }
         }
@@ -83,7 +115,52 @@ public class GameMap {
         filePath.close();
     }
 
-    public static Entity getEntity(int x, int y) {
+    // support for hashtable brickList// khá tệ
+    public static int generateKey(int x, int y) {
+        return x * 100 + y;
+    }
+    public static Set<Integer> getBrickSet() {
+        return brickList.keySet();
+    }
+    //
+
+    public static char[][] getMap() {
+        return map;
+    }
+
+    public static Entity getEntityAt(int x, int y) {
+        Entity entity = null;
+        for (Entity e : entityList) {
+            if (e.getX() == x && e.getY() == y) {
+                entity = e;
+            }
+        }
+        return entity;
+    }
+
+    public static Enemy getEnemy() {
+        Iterator<DynamicEntity> itr = entityList.iterator();
+        DynamicEntity cur;
+        while (itr.hasNext()) {
+            cur = itr.next();
+            if (cur instanceof Enemy) {
+                return (Enemy) cur;
+            }
+        }
+        return null;
+    }
+
+    public static Bomber getBomber() {
+        Iterator<DynamicEntity> itr = entityList.iterator();
+
+        DynamicEntity cur;
+        while (itr.hasNext()) {
+            cur = itr.next();
+
+            if (cur instanceof Bomber) {
+                return (Bomber) cur;
+            }
+        }
 
         return null;
     }
