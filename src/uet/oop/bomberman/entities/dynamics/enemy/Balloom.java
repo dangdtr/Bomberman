@@ -34,25 +34,25 @@ public class Balloom extends Enemy {
     private void calculateMove() {
         count++;
         if (count < 150 && count >= 0) {
-            if (rightable(x, y)) {
+            if (rightable(x, y) && rightableBrick(x, y)) {
                 x += speed;
                 direction = 1;
             }
         }
         if (count >= 150 && count < 300) {
-            if (leftable(x, y)) {
+            if (leftable(x, y) && leftableBrick(x, y)) {
                 x -= speed;
                 direction = 3;
             }
         }
         if (count >= 300 && count < 450) {
-            if (upable(x, y)) {
+            if (upable(x, y) && upableBrick(x,y)) {
                 y -= speed;
                 direction = 0;
             }
         }
         if (count >= 450 && count < 600) {
-            if (downable(x, y)) {
+            if (downable(x, y) && downableBrick(x, y)) {
                 y += speed;
                 direction = 2;
             }
@@ -75,7 +75,8 @@ public class Balloom extends Enemy {
     public void killBomber() {
         if (Bomber.alive) {
             if (Collisions.checkCollision(this, Objects.requireNonNull(GameMap.getBomber()))) {
-                Bomber.alive = false;
+//                Bomber.alive = false;
+                Bomber.alive = true;
             }
         }
     }

@@ -61,24 +61,27 @@ public class Bomber extends Player {
     private void calculateMove() {
         if (alive) {
             if (Keyboard.UP) {
-                if (upable(x, y)) {
+                if (upable(x, y) && upableBrick(x,y)) {
                     y = y - VELOCITY;
                 }
             }
             if (Keyboard.LEFT) {
-                if (leftable(x, y)) {
+                if (leftable(x, y) && leftableBrick(x, y)) {
                     x = x - VELOCITY;
                 }
             }
             if (Keyboard.DOWN) {
-                if (downable(x, y)) {
+                if (downable(x, y) && downableBrick(x, y)) {
                     y = y + VELOCITY;
                 }
+
             }
             if (Keyboard.RIGHT) {
-                if (rightable(x, y)) {
+                if (rightable(x, y) && rightableBrick(x, y)) {
                     x = x + VELOCITY;
+
                 }
+
             }
         }
     }

@@ -28,7 +28,9 @@ public class Oneal extends Enemy {
     public void killBomber() {
         if (Bomber.alive) {
             if (Collisions.checkCollision(this, Objects.requireNonNull(GameMap.getBomber()))) {
-                Bomber.alive = false;
+//                Bomber.alive = false;
+                Bomber.alive = true;
+
             }
         }
     }
@@ -41,26 +43,26 @@ public class Oneal extends Enemy {
         direction = ai.calcDirection();
 
         if (direction == 0)  {
-            if (upable(x, y)) {
+            if (upable(x, y) && upableBrick(x,y)) {
                 y -= speed;
             }
 
         }
 
         else if (direction == 1) {
-            if (rightable(x, y)) {
+            if (rightable(x, y) && rightableBrick(x, y)) {
                 x += speed;
             }
         }
 
         else if (direction == 2) {
-            if (downable(x, y)) {
+            if (downable(x, y) && downableBrick(x, y)) {
                 y += speed;
             }
         }
 
         else if (direction == 3) {
-            if (leftable(x, y)) {
+            if (leftable(x, y) && leftableBrick(x, y)) {
                 x -= speed;
             }
         }

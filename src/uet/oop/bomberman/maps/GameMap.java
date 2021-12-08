@@ -23,7 +23,7 @@ public class GameMap {
     private static int widthMap;
     public static List<DynamicEntity> entityList = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
-    public static Hashtable<Integer, Entity> brickList = new Hashtable<>();
+    public static Map<Integer, Brick> brickList = new HashMap<>();
 
     // cheat qua
 //    private static final char[][] map = new char[13][31];
@@ -51,7 +51,7 @@ public class GameMap {
     public static void initMap() {
         entityList = new ArrayList<>();
         stillObjects = new ArrayList<>();
-        brickList = new Hashtable<>();
+        brickList = new HashMap<>();
         map = new char[getHeightMap()][getWidthMap()];
     }
 
@@ -68,7 +68,7 @@ public class GameMap {
                         break;
                     case '*':
                         obj = new Brick(j, i, Sprite.brick.getFxImage());
-                        brickList.put(generateKey(j, i), obj);
+                        brickList.put(generateKey(j, i), new Brick(j, i, Sprite.brick.getFxImage()));
 
                         stillObjects.add( new Grass(j, i, Sprite.grass.getFxImage()));
                         break;

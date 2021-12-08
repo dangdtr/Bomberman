@@ -13,6 +13,7 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.dynamics.DynamicEntity;
 import uet.oop.bomberman.entities.dynamics.bomb.Bomb;
 import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
+import uet.oop.bomberman.entities.statics.destroyable.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
 import uet.oop.bomberman.modules.Keyboard;
@@ -31,6 +32,12 @@ public class BombermanGame extends Application {
     private Canvas canvas;
 
     private final Keyboard keyboard = new Keyboard();
+
+    //---------------// temp var to megre
+    private Bomber bomberman;
+    private Bomb bomb;
+    private int numberOfBomb = 1;
+    //---------------//
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -73,7 +80,15 @@ public class BombermanGame extends Application {
             @Override
             public void handle(KeyEvent event) {
                 keyboard.setInputKeyEvent(event);
-            }
+                if (Keyboard.SPACE && numberOfBomb != 0) {
+                    System.out.println("create");
+                    bomberman = GameMap.getBomber();
+                    int tmpX = Math.round((bomberman.getX() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE);
+                    int tmpY = Math.round((bomberman.getY() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE);// Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
+                    bomb = new Bomb(tmpX, tmpY, Sprite.bomb.getFxImage());
+//              entities.add(bomb);
+                    numberOfBomb--;
+                }            }
         });
 
         scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -101,6 +116,37 @@ public class BombermanGame extends Application {
                 }
             }
         }
+        bombUpdate();
+    }
+
+    private void bombUpdate() {
+        //bomb = GameMap.getBomber();
+        if (bomb != null) {
+            System.out.println(numberOfBomb);
+
+            bomb.update();
+            if (!bomb.done && bomb.explosion) {
+                for (int i = 0; i < bomb.flameList.size(); i++) {
+                    bomb.flameList.get(i).update();
+                    int xFlame = bomb.flameList.get(i).getX() / Sprite.SCALED_SIZE;
+                    int yFlame = bomb.flameList.get(i).getY() / Sprite.SCALED_SIZE;
+                    if(brickList.containsKey(GameMap.generateKey(xFlame, yFlame))) {
+                        Brick brick = brickList.get(GameMap.generateKey(xFlame, yFlame));
+                        brick.setExploded(true);
+                        brick.update();
+                        if (brick.done) {
+                            System.out.println("___");
+                            brickList.remove(GameMap.generateKey(xFlame, yFlame));
+                        }
+                    }
+                }
+            }
+            if (bomb.done && numberOfBomb < 1){
+                numberOfBomb++;
+            }
+
+        }
+
     }
 
     public void render() {
@@ -115,6 +161,23 @@ public class BombermanGame extends Application {
             for (Integer value : GameMap.getBrickSet()) {
                 brickList.get(value).render(gc);
             }
+        }
+        bombRender();
+
+    }
+
+    private void bombRender() {
+        if (bomb != null) {
+            if (!bomb.done) {
+                bomb.render(gc);
+            }
+            if (!bomb.done && bomb.explosion) {
+                for (int i = 0; i < bomb.flameList.size(); i++) {
+                    bomb.flameList.get(i).render(gc);
+                }
+            }
+
+
         }
     }
 }
