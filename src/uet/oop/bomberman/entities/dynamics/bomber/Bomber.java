@@ -66,27 +66,33 @@ public class Bomber extends Player {
     private void calculateMove() {
         Bomb bomb = BombermanGame.getBomb();
         if (alive) {
+            int dx = 0;
+            int dy = 0;
             if (Keyboard.UP) {
-                if (upable(x, y) && upableBrick(x,y) /*&& !collideBomb(bomb, this)*/) {
-                    y = y - VELOCITY;
+                if (upable(x, y) && upableBrick(x, y)) {
+                    dy--;
                 }
             }
             if (Keyboard.LEFT) {
-                if (leftable(x, y) && leftableBrick(x, y) /*&& !collideBomb(bomb, this)*/) {
-                    x = x - VELOCITY;
+                if (leftable(x, y) && leftableBrick(x, y)) {
+                    dx--;
                 }
             }
             if (Keyboard.DOWN) {
-                if (downable(x, y) && downableBrick(x, y) /*&& !collideBomb(bomb, this)*/) {
-                    y = y + VELOCITY;
+                if (downable(x, y) && downableBrick(x, y)) {
+                    dy++;
                 }
 
             }
             if (Keyboard.RIGHT) {
-                if (rightable(x, y) && rightableBrick(x, y) /*&& !collideBomb(bomb, this)*/) {
-                    x = x + VELOCITY;
+                if (rightable(x, y) && rightableBrick(x, y)) {
+                    dx++;
                 }
+
             }
+            x += dx;
+            y += dy;
+
         }
     }
 

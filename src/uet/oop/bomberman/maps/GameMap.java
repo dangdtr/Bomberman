@@ -25,7 +25,7 @@ public class GameMap {
     private static int widthMap;
     public static List<DynamicEntity> entityList = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
-    public static Map<Integer, Stack<Tile>> brickList = new HashMap<>();
+    public static Map<Integer, Stack<Entity>> brickList = new HashMap<>();
 
     // cheat qua
 //    private static final char[][] map = new char[13][31];
@@ -63,7 +63,7 @@ public class GameMap {
             for (int j = 0; j < widthMap; j++) {
                 char c = map[i][j];
                 Entity obj;
-                Stack<Tile> layer = new Stack<>();
+                Stack<Entity> layer = new Stack<>();
                 switch (c) {
                     case '#':
                         obj = new Wall(j, i, Sprite.wall.getFxImage());

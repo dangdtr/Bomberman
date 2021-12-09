@@ -19,6 +19,7 @@ public abstract class DynamicEntity extends Entity {
     public static boolean alive = true;
     protected int direction = -1;
     protected final int MAX_ANIMATE = 7500;
+    protected final int SIZE = Sprite.SCALED_SIZE;//3/4 * Sprite.SCALED_SIZE;
 
 
     public DynamicEntity(int xUnit, int yUnit, Image img) {
@@ -27,65 +28,6 @@ public abstract class DynamicEntity extends Entity {
 
     private int x1_temp, x2_temp, y1_temp, y2_temp;
     protected final int pixel = 1;
-
-//    protected boolean leftable(int x_pos, int y_pos) {
-//        x1_temp = (y_pos + pixel) / Sprite.SCALED_SIZE;
-//        y1_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;
-//
-//        x2_temp = (y_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE;
-//        y2_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;
-//
-//        return GameMap.getMap()[x1_temp][y1_temp] != '#' &&
-//                GameMap.getMap()[x2_temp][y2_temp] != '#' &&
-//                GameMap.getMap()[x1_temp][y1_temp] != '*' &&
-//                GameMap.getMap()[x2_temp][y2_temp] != '*'
-//                ;
-//    }
-//
-//
-//    protected boolean rightable(int x_pos, int y_pos) {
-//        x1_temp = (y_pos + pixel) / Sprite.SCALED_SIZE;
-//        y1_temp = (x_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE;
-//
-//        x2_temp = (y_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE;
-//        y2_temp = (x_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE;
-//
-//
-//        return GameMap.getMap()[x1_temp][y1_temp] != '#' &&
-//                GameMap.getMap()[x2_temp][y2_temp] != '#' &&
-//                GameMap.getMap()[x1_temp][y1_temp] != '*' &&
-//                GameMap.getMap()[x2_temp][y2_temp] != '*'
-//                ;
-//    }
-//
-//
-//    protected boolean downable(int x_pos, int y_pos) {
-//        x1_temp = (y_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE;
-//        y1_temp = (x_pos + pixel) / Sprite.SCALED_SIZE;
-//
-//        x2_temp = (y_pos + Sprite.SCALED_SIZE + pixel) / Sprite.SCALED_SIZE;
-//        y2_temp = (x_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE;
-//
-//
-//        return GameMap.getMap()[x1_temp][y1_temp] != '#' &&
-//                GameMap.getMap()[x2_temp][y2_temp] != '#' &&
-//                GameMap.getMap()[x1_temp][y1_temp] != '*' &&
-//                GameMap.getMap()[x2_temp][y2_temp] != '*';
-//    }
-//
-//    protected boolean upable(int x_pos, int y_pos) {
-//        x1_temp = (y_pos - pixel) / Sprite.SCALED_SIZE;
-//        y1_temp = (x_pos + pixel) / Sprite.SCALED_SIZE;
-//
-//        x2_temp = (y_pos - pixel) / Sprite.SCALED_SIZE;
-//        y2_temp = (x_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE;
-//
-//
-//        return GameMap.getMap()[x1_temp][y1_temp] != '#' &&
-//                GameMap.getMap()[x2_temp][y2_temp] != '#'&&
-//                GameMap.getMap()[x1_temp][y1_temp] != '*' &&
-//                GameMap.getMap()[x2_temp][y2_temp] != '*';
-//    }
 
     public boolean collideBomb(Bomb bomb, DynamicEntity dynamicEntity) {
         if (bomb == null || dynamicEntity == null) return false;
@@ -103,6 +45,124 @@ public abstract class DynamicEntity extends Entity {
         return false;
     }
 
+    /*
+    protected boolean leftable(int x_pos, int y_pos) {
+        x1_temp = (y_pos + 10 + pixel) / Sprite.SCALED_SIZE;
+        y1_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;
+
+        x2_temp = (y_pos - 10 + SIZE - pixel) / Sprite.SCALED_SIZE;
+        y2_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;
+
+        return GameMap.getMap()[x1_temp][y1_temp] != '#' &&
+                GameMap.getMap()[x2_temp][y2_temp] != '#';
+    }
+
+
+    protected boolean rightable(int x_pos, int y_pos) {
+        x1_temp = (y_pos + 10 + pixel) / Sprite.SCALED_SIZE;
+        y1_temp = (x_pos - 15 + SIZE + pixel) / Sprite.SCALED_SIZE;
+
+        x2_temp = (y_pos - 10 + SIZE - pixel) / Sprite.SCALED_SIZE;
+        y2_temp = (x_pos - 15 + SIZE + pixel) / Sprite.SCALED_SIZE;
+
+        return GameMap.getMap()[x1_temp][y1_temp] != '#' &&
+                GameMap.getMap()[x2_temp][y2_temp] != '#';
+    }
+
+
+    protected boolean downable(int x_pos, int y_pos) {
+        x1_temp = (y_pos + 10 + SIZE + pixel) / Sprite.SCALED_SIZE;
+        y1_temp = (x_pos + pixel) / Sprite.SCALED_SIZE;
+
+        x2_temp = (y_pos + SIZE + pixel) / Sprite.SCALED_SIZE;
+        y2_temp = (x_pos - 15 + SIZE - pixel) / Sprite.SCALED_SIZE;
+
+        return GameMap.getMap()[x1_temp][y1_temp] != '#' &&
+                GameMap.getMap()[x2_temp][y2_temp] != '#';
+    }
+
+    protected boolean upable(int x_pos, int y_pos) {
+        x1_temp = (y_pos + 10 - pixel) / Sprite.SCALED_SIZE;
+        y1_temp = (x_pos + pixel) / Sprite.SCALED_SIZE;
+
+        x2_temp = (y_pos - pixel) / Sprite.SCALED_SIZE;
+        y2_temp = (x_pos - 15 + SIZE - pixel) / Sprite.SCALED_SIZE;
+
+        return GameMap.getMap()[x1_temp][y1_temp] != '#' &&
+                GameMap.getMap()[x2_temp][y2_temp] != '#';
+    }
+
+
+    protected boolean leftableBrick(int x_pos, int y_pos) {
+        x1_temp = (y_pos + pixel) / Sprite.SCALED_SIZE;
+        y1_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;
+
+        x2_temp = (y_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE;
+        y2_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;
+
+        if (GameMap.brickList.containsKey(GameMap.generateKey(y1_temp, x1_temp)) ||
+                GameMap.brickList.containsKey(GameMap.generateKey(y2_temp, x2_temp))) {
+            if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)).peek() instanceof Brick ||
+                    GameMap.brickList.get(GameMap.generateKey(y2_temp, x1_temp)).peek() instanceof Brick) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    protected boolean rightableBrick(int x_pos, int y_pos) {
+        x1_temp = (y_pos + 10 + pixel) / Sprite.SCALED_SIZE;
+        y1_temp = (x_pos - 15 + SIZE + pixel) / Sprite.SCALED_SIZE;
+
+        x2_temp = (y_pos - 10 + SIZE - pixel) / Sprite.SCALED_SIZE;
+        y2_temp = (x_pos - 15 + SIZE + pixel) / Sprite.SCALED_SIZE;
+
+        if (GameMap.brickList.containsKey(GameMap.generateKey(y1_temp, x1_temp)) ||
+                GameMap.brickList.containsKey(GameMap.generateKey(y2_temp, x2_temp))) {
+            if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)).peek() instanceof Brick ||
+                    GameMap.brickList.get(GameMap.generateKey(y2_temp, x1_temp)).peek() instanceof Brick) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    protected boolean downableBrick(int x_pos, int y_pos) {
+        x1_temp = (y_pos + 10 + SIZE + pixel) / Sprite.SCALED_SIZE;
+        y1_temp = (x_pos + pixel) / Sprite.SCALED_SIZE;
+
+        x2_temp = (y_pos + SIZE + pixel) / Sprite.SCALED_SIZE;
+        y2_temp = (x_pos - 15 + SIZE - pixel) / Sprite.SCALED_SIZE;
+
+        if (GameMap.brickList.containsKey(GameMap.generateKey(y1_temp, x1_temp)) ||
+                GameMap.brickList.containsKey(GameMap.generateKey(y2_temp, x2_temp))) {
+            if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)).peek() instanceof Brick ||
+                    GameMap.brickList.get(GameMap.generateKey(y2_temp, x1_temp)).peek() instanceof Brick) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected boolean upableBrick(int x_pos, int y_pos) {
+        x1_temp = (y_pos + 10 - pixel) / Sprite.SCALED_SIZE;
+        y1_temp = (x_pos + pixel) / Sprite.SCALED_SIZE;
+
+        x2_temp = (y_pos - pixel) / Sprite.SCALED_SIZE;
+        y2_temp = (x_pos - 15 + SIZE - pixel) / Sprite.SCALED_SIZE;
+
+        if (GameMap.brickList.containsKey(GameMap.generateKey(y1_temp, x1_temp)) ||
+                GameMap.brickList.containsKey(GameMap.generateKey(y2_temp, x2_temp))) {
+            if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)).peek() instanceof Brick ||
+                    GameMap.brickList.get(GameMap.generateKey(y2_temp, x1_temp)).peek() instanceof Brick) {
+                return false;
+            }
+        }
+        return true;
+    }
+    */
     protected boolean leftable(int x_pos, int y_pos) {
         x1_temp = (y_pos + pixel) / Sprite.SCALED_SIZE;
         y1_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;

@@ -9,12 +9,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.dynamics.DynamicEntity;
 import uet.oop.bomberman.entities.dynamics.bomb.Bomb;
+import uet.oop.bomberman.entities.dynamics.bomb.Flame;
 import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
 import uet.oop.bomberman.entities.statics.Tile;
 import uet.oop.bomberman.entities.statics.destroyable.Brick;
+import uet.oop.bomberman.entities.statics.item.FlameItem;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
 import uet.oop.bomberman.modules.Keyboard;
@@ -119,6 +122,31 @@ public class BombermanGame extends Application {
             }
         }
         bombUpdate();
+        itemUpdate();
+    }
+
+    private void itemUpdate() {
+        if (!brickList.isEmpty()) {
+            for (Integer value : GameMap.getBrickSet()) {
+                if (brickList.get(value).peek() instanceof FlameItem && Collisions.checkCollision(getBomber(),brickList.get(value).peek())) {
+                    Flame.lenOfFlame++;
+                    brickList.get(value).pop();
+                    FlameItem.timeItem = 0;
+                    FlameItem.isPickUp = true;
+                }
+            }
+            if (FlameItem.isPickUp){
+                FlameItem.timeItem++;
+                System.out.println(FlameItem.timeItem);
+                if (FlameItem.timeItem > 2000) {
+                    FlameItem.timeItem = 0;
+                    Flame.lenOfFlame--;
+                    FlameItem.isPickUp = false;
+
+                }
+            }
+
+        }
     }
 
     public static Bomb getBomb() {
@@ -128,7 +156,7 @@ public class BombermanGame extends Application {
     private void bombUpdate() {
         //bomb = GameMap.getBomber();
         if (bomb != null) {
-            System.out.println(numberOfBomb);
+//            System.out.println(numberOfBomb);
 
             bomb.update();
             if (!bomb.done && bomb.explosion) {
@@ -137,7 +165,7 @@ public class BombermanGame extends Application {
                     int xFlame = bomb.flameList.get(i).getX() / Sprite.SCALED_SIZE;
                     int yFlame = bomb.flameList.get(i).getY() / Sprite.SCALED_SIZE;
                     if(brickList.containsKey(GameMap.generateKey(xFlame, yFlame))) {
-                        Stack<Tile> tiles = brickList.get(GameMap.generateKey(xFlame, yFlame));
+                        Stack<Entity> tiles = brickList.get(GameMap.generateKey(xFlame, yFlame));
                         if (tiles.peek() instanceof Brick) {
                             Brick brick = (Brick) tiles.peek();
                             brick.setExploded(true);
