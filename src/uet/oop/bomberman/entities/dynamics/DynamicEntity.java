@@ -2,7 +2,10 @@ package uet.oop.bomberman.entities.dynamics;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.dynamics.bomb.Bomb;
+import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
 import uet.oop.bomberman.entities.statics.destroyable.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
@@ -84,6 +87,22 @@ public abstract class DynamicEntity extends Entity {
 //                GameMap.getMap()[x2_temp][y2_temp] != '*';
 //    }
 
+    public boolean collideBomb(Bomb bomb, DynamicEntity dynamicEntity) {
+        if (bomb == null || dynamicEntity == null) return false;
+        int dx = Math.abs(bomb.getX() - dynamicEntity.getX());
+        int dy = Math.abs(bomb.getY() - dynamicEntity.getY());
+        // bomber đang ở vị trí đặt bom.
+        if (!(dx >= 0 && dx <= Sprite.SCALED_SIZE && dy >= 0 && dy <= Sprite.SCALED_SIZE)) {
+            bomb.canPass = false;
+        }
+
+        if (!bomb.canPass) {
+            return Collisions.checkCollision(bomb, dynamicEntity);
+        }
+
+        return false;
+    }
+
     protected boolean leftable(int x_pos, int y_pos) {
         x1_temp = (y_pos + pixel) / Sprite.SCALED_SIZE;
         y1_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;
@@ -138,9 +157,12 @@ public abstract class DynamicEntity extends Entity {
         x2_temp = (y_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE;
         y2_temp = (x_pos - pixel) / Sprite.SCALED_SIZE;
 
-        if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)) != null ||
-                GameMap.brickList.get(GameMap.generateKey(y2_temp, x2_temp)) != null) {
-            return false;
+        if (GameMap.brickList.containsKey(GameMap.generateKey(y1_temp, x1_temp)) ||
+                GameMap.brickList.containsKey(GameMap.generateKey(y2_temp, x2_temp))) {
+            if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)).peek() instanceof Brick ||
+                    GameMap.brickList.get(GameMap.generateKey(y2_temp, x1_temp)).peek() instanceof Brick) {
+                return false;
+            }
         }
         return true;
     }
@@ -155,7 +177,10 @@ public abstract class DynamicEntity extends Entity {
 
         if (GameMap.brickList.containsKey(GameMap.generateKey(y1_temp, x1_temp)) ||
                 GameMap.brickList.containsKey(GameMap.generateKey(y2_temp, x2_temp))) {
-            return false;
+            if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)).peek() instanceof Brick ||
+                    GameMap.brickList.get(GameMap.generateKey(y2_temp, x1_temp)).peek() instanceof Brick) {
+                return false;
+            }
         }
         return true;
     }
@@ -170,9 +195,11 @@ public abstract class DynamicEntity extends Entity {
 
         if (GameMap.brickList.containsKey(GameMap.generateKey(y1_temp, x1_temp)) ||
                 GameMap.brickList.containsKey(GameMap.generateKey(y2_temp, x2_temp))) {
-            return false;
+            if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)).peek() instanceof Brick ||
+                    GameMap.brickList.get(GameMap.generateKey(y2_temp, x1_temp)).peek() instanceof Brick) {
+                return false;
+            }
         }
-
         return true;
     }
 
@@ -182,10 +209,12 @@ public abstract class DynamicEntity extends Entity {
 
         x2_temp = (y_pos - pixel) / Sprite.SCALED_SIZE;
         y2_temp = (x_pos + Sprite.SCALED_SIZE - pixel) / Sprite.SCALED_SIZE;
-
         if (GameMap.brickList.containsKey(GameMap.generateKey(y1_temp, x1_temp)) ||
                 GameMap.brickList.containsKey(GameMap.generateKey(y2_temp, x2_temp))) {
-            return false;
+            if (GameMap.brickList.get(GameMap.generateKey(y1_temp, x1_temp)).peek() instanceof Brick ||
+                    GameMap.brickList.get(GameMap.generateKey(y2_temp, x1_temp)).peek() instanceof Brick) {
+                return false;
+            }
         }
         return true;
     }

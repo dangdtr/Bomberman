@@ -3,9 +3,13 @@ package uet.oop.bomberman.entities.dynamics.bomber;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.collisions.Collisions;
+import uet.oop.bomberman.entities.dynamics.bomb.Bomb;
 import uet.oop.bomberman.entities.dynamics.enemy.Balloom;
 import uet.oop.bomberman.entities.dynamics.enemy.Enemy;
 import uet.oop.bomberman.entities.dynamics.enemy.Oneal;
+import uet.oop.bomberman.entities.statics.item.FlameItem;
+import uet.oop.bomberman.entities.statics.item.Item;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
 import uet.oop.bomberman.modules.Keyboard;
@@ -53,35 +57,35 @@ public class Bomber extends Player {
         if (alive) {
             chooseSprite();
         }
+        eatItem(GameMap.getItem(x, y));
         animate();
         calculateMove();
         setImg(sprite.getFxImage());
     }
 
     private void calculateMove() {
+        Bomb bomb = BombermanGame.getBomb();
         if (alive) {
             if (Keyboard.UP) {
-                if (upable(x, y) && upableBrick(x,y)) {
+                if (upable(x, y) && upableBrick(x,y) /*&& !collideBomb(bomb, this)*/) {
                     y = y - VELOCITY;
                 }
             }
             if (Keyboard.LEFT) {
-                if (leftable(x, y) && leftableBrick(x, y)) {
+                if (leftable(x, y) && leftableBrick(x, y) /*&& !collideBomb(bomb, this)*/) {
                     x = x - VELOCITY;
                 }
             }
             if (Keyboard.DOWN) {
-                if (downable(x, y) && downableBrick(x, y)) {
+                if (downable(x, y) && downableBrick(x, y) /*&& !collideBomb(bomb, this)*/) {
                     y = y + VELOCITY;
                 }
 
             }
             if (Keyboard.RIGHT) {
-                if (rightable(x, y) && rightableBrick(x, y)) {
+                if (rightable(x, y) && rightableBrick(x, y) /*&& !collideBomb(bomb, this)*/) {
                     x = x + VELOCITY;
-
                 }
-
             }
         }
     }
@@ -107,6 +111,13 @@ public class Bomber extends Player {
         if (!Keyboard.UP && !Keyboard.LEFT && !Keyboard.DOWN && !Keyboard.RIGHT) {
             sprite = prevSprite;
         }
+    }
 
+    private void eatItem(Item item) {
+        if (item instanceof FlameItem) {
+            if (Collisions.checkCollision(item, this)) {
+                GameMap.brickList.get(GameMap.generateKey(x,y)).pop();
+            }
+        }
     }
 }

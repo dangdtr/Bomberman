@@ -1,6 +1,5 @@
 package uet.oop.bomberman.maps;
 
-import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.dynamics.DynamicEntity;
 import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
@@ -8,8 +7,11 @@ import uet.oop.bomberman.entities.dynamics.enemy.Balloom;
 import uet.oop.bomberman.entities.dynamics.enemy.Enemy;
 import uet.oop.bomberman.entities.dynamics.enemy.Oneal;
 import uet.oop.bomberman.entities.statics.Grass;
+import uet.oop.bomberman.entities.statics.Tile;
 import uet.oop.bomberman.entities.statics.Wall;
 import uet.oop.bomberman.entities.statics.destroyable.Brick;
+import uet.oop.bomberman.entities.statics.item.FlameItem;
+import uet.oop.bomberman.entities.statics.item.Item;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.FileReader;
@@ -23,7 +25,7 @@ public class GameMap {
     private static int widthMap;
     public static List<DynamicEntity> entityList = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
-    public static Map<Integer, Brick> brickList = new HashMap<>();
+    public static Map<Integer, Stack<Tile>> brickList = new HashMap<>();
 
     // cheat qua
 //    private static final char[][] map = new char[13][31];
@@ -61,22 +63,28 @@ public class GameMap {
             for (int j = 0; j < widthMap; j++) {
                 char c = map[i][j];
                 Entity obj;
+                Stack<Tile> layer = new Stack<>();
                 switch (c) {
                     case '#':
                         obj = new Wall(j, i, Sprite.wall.getFxImage());
                         stillObjects.add(obj);
                         break;
                     case '*':
-                        obj = new Brick(j, i, Sprite.brick.getFxImage());
-                        brickList.put(generateKey(j, i), new Brick(j, i, Sprite.brick.getFxImage()));
-
-                        stillObjects.add( new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        brickList.put(generateKey(j, i), layer);
                         break;
                     case 'p':
                         Bomber bomber = new Bomber(j, i, Sprite.player_right.getFxImage());
                         obj = new Grass(j, i, Sprite.grass.getFxImage());
                         entityList.add(bomber);
                         stillObjects.add(obj);
+                        break;
+                    case 'f':
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new FlameItem(j, i, Sprite.powerup_flames.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        brickList.put(generateKey(j,i), layer);
                         break;
                     case '1':
                         Balloom balloom = new Balloom(j, i, Sprite.oneal_right1.getFxImage());
@@ -169,6 +177,17 @@ public class GameMap {
             }
         }
 
+        return null;
+    }
+
+    public static Item getItem(int _x, int _y) {
+        Item cur;
+        if (brickList.containsKey(generateKey(_x,_y))) {
+            if (brickList.get(generateKey(_x, _y)).peek() instanceof Item) {
+                cur = (Item) brickList.get(generateKey(_x, _y)).peek();
+                return cur;
+            }
+        }
         return null;
     }
 }

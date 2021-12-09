@@ -1,7 +1,10 @@
 package uet.oop.bomberman.entities.dynamics.bomb;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.dynamics.DynamicEntity;
+import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
+import uet.oop.bomberman.entities.dynamics.enemy.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.IOException;
@@ -13,6 +16,7 @@ public class Bomb extends DynamicEntity {
     private long bombTime;// = System.currentTimeMillis();
     public boolean explosion = false;
     public boolean done = false;
+    public boolean canPass = true;
     public final List<Flame> flameList = new ArrayList<>();
 
     public Bomb(int xUnit, int yUnit, Image img) {

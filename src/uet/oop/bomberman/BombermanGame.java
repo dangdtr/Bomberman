@@ -13,6 +13,7 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.dynamics.DynamicEntity;
 import uet.oop.bomberman.entities.dynamics.bomb.Bomb;
 import uet.oop.bomberman.entities.dynamics.bomber.Bomber;
+import uet.oop.bomberman.entities.statics.Tile;
 import uet.oop.bomberman.entities.statics.destroyable.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
@@ -35,7 +36,8 @@ public class BombermanGame extends Application {
 
     //---------------// temp var to megre
     private Bomber bomberman;
-    private Bomb bomb;
+    private static
+    Bomb bomb;
     private int numberOfBomb = 1;
     //---------------//
 
@@ -119,6 +121,10 @@ public class BombermanGame extends Application {
         bombUpdate();
     }
 
+    public static Bomb getBomb() {
+        return bomb;
+    }
+
     private void bombUpdate() {
         //bomb = GameMap.getBomber();
         if (bomb != null) {
@@ -131,12 +137,15 @@ public class BombermanGame extends Application {
                     int xFlame = bomb.flameList.get(i).getX() / Sprite.SCALED_SIZE;
                     int yFlame = bomb.flameList.get(i).getY() / Sprite.SCALED_SIZE;
                     if(brickList.containsKey(GameMap.generateKey(xFlame, yFlame))) {
-                        Brick brick = brickList.get(GameMap.generateKey(xFlame, yFlame));
-                        brick.setExploded(true);
-                        brick.update();
-                        if (brick.done) {
-                            System.out.println("___");
-                            brickList.remove(GameMap.generateKey(xFlame, yFlame));
+                        Stack<Tile> tiles = brickList.get(GameMap.generateKey(xFlame, yFlame));
+                        if (tiles.peek() instanceof Brick) {
+                            Brick brick = (Brick) tiles.peek();
+                            brick.setExploded(true);
+                            brick.update();
+                            if (brick.done) {
+                                System.out.println("___");
+                                tiles.pop();
+                            }
                         }
                     }
                 }
@@ -154,13 +163,13 @@ public class BombermanGame extends Application {
         for (Entity stillObject : stillObjects) {
             stillObject.render(gc);
         }
-        for (DynamicEntity g : entityList) {
-            g.render(gc);
-        }
         if (!brickList.isEmpty()) {
             for (Integer value : GameMap.getBrickSet()) {
-                brickList.get(value).render(gc);
+                brickList.get(value).peek().render(gc);
             }
+        }
+        for (DynamicEntity g : entityList) {
+            g.render(gc);
         }
         bombRender();
 
@@ -176,8 +185,6 @@ public class BombermanGame extends Application {
                     bomb.flameList.get(i).render(gc);
                 }
             }
-
-
         }
     }
 }
