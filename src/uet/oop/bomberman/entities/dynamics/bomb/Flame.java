@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Flame extends DynamicEntity {
 	private String status;
-	public static int lenOfFlame = 2;
+	public static int lenOfFlame = 1;
 	private final String LEFT_LAST = "LEFT_LAST";
 	private final String RIGHT_LAST = "RIGHT_LAST";
 	private final String UP_LAST = "TOP_LAST";

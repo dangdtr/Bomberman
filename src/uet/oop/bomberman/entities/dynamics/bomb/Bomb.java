@@ -46,9 +46,6 @@ public class Bomb extends DynamicEntity {
             } else {
                 if (bombTime < 375) {
                     explosion = true;
-                    System.out.println("run 2s");
-//          handleFlame();
-                    System.out.println("after handlfl");
 
                 } else if (bombTime > 375) {
                     System.out.println("done bomb");
@@ -58,19 +55,16 @@ public class Bomb extends DynamicEntity {
                 }
             }
         }
-        //    if (explosion) {
-        //    }
-        //    explosion = false;
     }
 
     // x y đã nhân với SCALED_SIZE rồi
     private void handleFlame() {
+        flameList.clear();
         Flame newFlame = null;
         for (int i = 0; i < Flame.lenOfFlame; i++) {
             if (!leftable(x - i * Sprite.SCALED_SIZE, y)) {
                 break;
             }
-//      if (!leftableBrick(x - i * Sprite.SCALED_SIZE, y)) {
             newFlame =
                     new Flame(
                             (x - (1 + i) * Sprite.SCALED_SIZE) / Sprite.SCALED_SIZE,
@@ -84,17 +78,13 @@ public class Bomb extends DynamicEntity {
             }
 
             flameList.add(newFlame);
-            //        flames[index++] = newFlame;
-            //        index++;
 
-//      }
         }
 
         for (int i = 0; i < Flame.lenOfFlame; i++) {
             if (!rightable(x + i * Sprite.SCALED_SIZE, y)) {
                 break;
             }
-//      if (!rightableBrick(x + i * Sprite.SCALED_SIZE, y)) {
             newFlame =
                     new Flame(
                             (x + (1 + i) * Sprite.SCALED_SIZE) / Sprite.SCALED_SIZE,
@@ -107,17 +97,13 @@ public class Bomb extends DynamicEntity {
             }
 
             flameList.add(newFlame);
-            //        flames[index++] = newFlame;
 
-
-//      }
         }
 
         for (int i = 0; i < Flame.lenOfFlame; i++) {
             if (!upable(x, y - i * Sprite.SCALED_SIZE)) {
                 break;
             }
-//      if (!upableBrick(x, y - i * Sprite.SCALED_SIZE)) {
             newFlame =
                     new Flame(
                             x / Sprite.SCALED_SIZE,
@@ -129,17 +115,14 @@ public class Bomb extends DynamicEntity {
                 newFlame.setStatus("TOP_LAST");
             }
             flameList.add(newFlame);
-            //        flames[index++] = newFlame;
 
 
-//      }
         }
 
         for (int i = 0; i < Flame.lenOfFlame; i++) {
             if (!downable(x, y + i * Sprite.SCALED_SIZE)) {
                 break;
             }
-//      if (!downableBrick(x, y + i * Sprite.SCALED_SIZE)) {
             newFlame =
                     new Flame(
                             x / Sprite.SCALED_SIZE,
@@ -151,17 +134,13 @@ public class Bomb extends DynamicEntity {
                 newFlame.setStatus("DOWN_LAST");
             }
             flameList.add(newFlame);
-            //        flames[index++] = newFlame;
 
-//      }
         }
         newFlame =
                 new Flame(
                         x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, Sprite.explosion_vertical.getFxImage());
         newFlame.setStatus("CENTER");
         flameList.add(newFlame);
-        //    flameList.addAll(Arrays.asList(flames));
-        //    entities.add(flames[0]);
     }
 
     //-----------------//co the khong dung
