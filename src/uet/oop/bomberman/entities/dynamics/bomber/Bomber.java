@@ -17,7 +17,7 @@ import uet.oop.bomberman.modules.Keyboard;
 import java.io.IOException;
 
 public class Bomber extends Player {
-    private final int VELOCITY = 2;
+    private static int VELOCITY = 1;
     private Sprite prevSprite = Sprite.player_right;
     public static boolean collide = false;
     public Bomber(int x, int y, Image img) {
@@ -57,24 +57,25 @@ public class Bomber extends Player {
         if (alive) {
             chooseSprite();
         }
-        eatItem(GameMap.getItem(x, y));
         animate();
         calculateMove();
         setImg(sprite.getFxImage());
     }
 
+    public static void setVELOCITY(int v) {
+        VELOCITY = v;
+    }
     private void calculateMove() {
-        Bomb bomb = BombermanGame.getBomb();
         if (alive) {
             int dx = 0;
             int dy = 0;
             if (Keyboard.UP) {
-                if (upable(x, y) && upableBrick(x, y)) {
+                if (upable(x, y) && upableBrick(x, y) ) {
                     dy--;
                 }
             }
             if (Keyboard.LEFT) {
-                if (leftable(x, y) && leftableBrick(x, y)) {
+                if (leftable(x, y) && leftableBrick(x, y) ) {
                     dx--;
                 }
             }
@@ -82,7 +83,6 @@ public class Bomber extends Player {
                 if (downable(x, y) && downableBrick(x, y)) {
                     dy++;
                 }
-
             }
             if (Keyboard.RIGHT) {
                 if (rightable(x, y) && rightableBrick(x, y)) {
@@ -90,8 +90,8 @@ public class Bomber extends Player {
                 }
 
             }
-            x += dx;
-            y += dy;
+            x += dx * VELOCITY;
+            y += dy * VELOCITY;
 
         }
     }
@@ -119,11 +119,4 @@ public class Bomber extends Player {
         }
     }
 
-    private void eatItem(Item item) {
-        if (item instanceof FlameItem) {
-            if (Collisions.checkCollision(item, this)) {
-                GameMap.brickList.get(GameMap.generateKey(x,y)).pop();
-            }
-        }
-    }
 }

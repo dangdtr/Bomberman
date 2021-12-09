@@ -7,11 +7,13 @@ import uet.oop.bomberman.entities.dynamics.enemy.Balloom;
 import uet.oop.bomberman.entities.dynamics.enemy.Enemy;
 import uet.oop.bomberman.entities.dynamics.enemy.Oneal;
 import uet.oop.bomberman.entities.statics.Grass;
-import uet.oop.bomberman.entities.statics.Tile;
 import uet.oop.bomberman.entities.statics.Wall;
 import uet.oop.bomberman.entities.statics.destroyable.Brick;
+import uet.oop.bomberman.entities.statics.item.BombItem;
 import uet.oop.bomberman.entities.statics.item.FlameItem;
 import uet.oop.bomberman.entities.statics.item.Item;
+import uet.oop.bomberman.entities.statics.item.SpeedItem;
+import uet.oop.bomberman.entities.statics.portal.Portal;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.FileReader;
@@ -83,6 +85,24 @@ public class GameMap {
                     case 'f':
                         layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
                         layer.add(new FlameItem(j, i, Sprite.powerup_flames.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        brickList.put(generateKey(j,i), layer);
+                        break;
+                    case 'b':
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new BombItem(j, i, Sprite.powerup_bombpass.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        brickList.put(generateKey(j,i), layer);
+                        break;
+                    case  's':
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new SpeedItem(j, i, Sprite.powerup_speed.getFxImage()));
+                        layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
+                        brickList.put(generateKey(j,i), layer);
+                        break;
+                    case 'x':
+                        layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
+                        layer.add(new Portal(j, i, Sprite.portal.getFxImage()));
                         layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
                         brickList.put(generateKey(j,i), layer);
                         break;
