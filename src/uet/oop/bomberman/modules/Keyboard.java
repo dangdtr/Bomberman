@@ -8,36 +8,36 @@ import javafx.scene.input.KeyEvent;
  */
 public class Keyboard {
 
-    public static boolean UP, LEFT, RIGHT, DOWN, SPACE;
+	public static boolean UP, LEFT, RIGHT, DOWN, SPACE;
 
-    public void setInputKeyEvent(javafx.scene.input.KeyEvent event) {
-        if (event.getEventType() == KeyEvent.KEY_PRESSED) {
-            if (event.getCode() == KeyCode.UP) {
-                UP = true;
-            } else if (event.getCode() == KeyCode.LEFT) {
-                LEFT = true;
-            } else if (event.getCode() == KeyCode.DOWN) {
-                DOWN = true;
-            } else if (event.getCode() == KeyCode.RIGHT) {
-                RIGHT = true;
-            }
-        } else {
-            UP = false;
-            LEFT = false;
-            DOWN = false;
-            RIGHT = false;
-        }
+	public static void setInputKeyEvent(javafx.scene.input.KeyEvent event) {
+		if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+			if (event.getCode() == KeyCode.UP) {
+				UP = true;
+			} else if (event.getCode() == KeyCode.LEFT) {
+				LEFT = true;
+			} else if (event.getCode() == KeyCode.DOWN) {
+				DOWN = true;
+			} else if (event.getCode() == KeyCode.RIGHT) {
+				RIGHT = true;
+			}
+		} else {
+			UP = false;
+			LEFT = false;
+			DOWN = false;
+			RIGHT = false;
+		}
 
-        if (event.getEventType() == KeyEvent.KEY_PRESSED) {
-            if (event.getCode() == KeyCode.SPACE) {
-                SPACE = true;
+		if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+			if (event.getCode() == KeyCode.SPACE) {
+				SPACE = true;
 //                System.out.println("space");
-            }
-        }else {
-            SPACE =  false;
+			}
+		} else {
+			SPACE = false;
 //            System.out.println("not");
 
-        }
-    }
+		}
+	}
 
 }
