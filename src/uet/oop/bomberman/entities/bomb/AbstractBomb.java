@@ -128,7 +128,7 @@ public class AbstractBomb extends AnimatedEntitiy {
 	}
 
 	@Override
-	protected void afterKill() throws IOException {
+	protected void afterKill() {
 
 	}
 

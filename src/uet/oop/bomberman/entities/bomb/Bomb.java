@@ -3,19 +3,13 @@ package uet.oop.bomberman.entities.bomb;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.collisions.Collisions;
-import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.bomber.Bomber;
-import uet.oop.bomberman.entities.character.enemy.Balloom;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
-import uet.oop.bomberman.entities.character.enemy.Oneal;
-import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Stack;
 
 
 public class Bomb extends AbstractBomb {
@@ -32,7 +26,7 @@ public class Bomb extends AbstractBomb {
 	public Bomb(int xUnit, int yUnit, Image img) {
 		super(xUnit, yUnit, img);
 		_timeToExplode = 0;
-		handleFlame();
+		initAndHandleFlame();
 	}
 
 	private void chooseSprite() {
@@ -86,10 +80,11 @@ public class Bomb extends AbstractBomb {
 			}
 		}
 	}
+
 	@Override
 	public void update() {
-		killBomber();
-		killEnemy();
+//		killBomber();
+//		killEnemy();
 		handleBomb();
 		chooseSprite();
 		animate();
@@ -100,14 +95,13 @@ public class Bomb extends AbstractBomb {
 		if (!_destroyed) {
 			_timeToExplode++;
 
-			if (_timeToExplode < 300) {
+			if (_timeToExplode < Game.TIME_TO_EXPLOSION_BOMB) {
 				_exploding = false;
 			} else {
-				if (_timeToExplode < 375) {
+				if (_timeToExplode < Game.TIME_TO_EXPLOSION_BOMB + Game.TIME_TO_DISAPPEAR) {
 					_exploding = true;
 
-				} else if (_timeToExplode > 375) {
-					System.out.println("done bomb");
+				} else if (_timeToExplode > Game.TIME_TO_EXPLOSION_BOMB + Game.TIME_TO_DISAPPEAR) {
 					_timeToExplode = 0;
 					_destroyed = true;
 
@@ -117,7 +111,7 @@ public class Bomb extends AbstractBomb {
 	}
 
 	// x y đã nhân với SCALED_SIZE rồi
-	private void handleFlame() {
+	private void initAndHandleFlame() {
 		flameList.clear();
 		Flame newFlame = null;
 		for (int i = 0; i < Game.LENGTH_OF_FLAME; i++) {
@@ -135,9 +129,7 @@ public class Bomb extends AbstractBomb {
 			} else {
 				newFlame.setStatus("LEFT_LAST");
 			}
-
 			flameList.add(newFlame);
-
 		}
 
 		for (int i = 0; i < Game.LENGTH_OF_FLAME; i++) {
@@ -154,9 +146,7 @@ public class Bomb extends AbstractBomb {
 			} else {
 				newFlame.setStatus("RIGHT_LAST");
 			}
-
 			flameList.add(newFlame);
-
 		}
 
 		for (int i = 0; i < Game.LENGTH_OF_FLAME; i++) {
@@ -174,8 +164,6 @@ public class Bomb extends AbstractBomb {
 				newFlame.setStatus("TOP_LAST");
 			}
 			flameList.add(newFlame);
-
-
 		}
 
 		for (int i = 0; i < Game.LENGTH_OF_FLAME; i++) {
@@ -193,7 +181,6 @@ public class Bomb extends AbstractBomb {
 				newFlame.setStatus("DOWN_LAST");
 			}
 			flameList.add(newFlame);
-
 		}
 		newFlame =
 				new Flame(
@@ -208,7 +195,7 @@ public class Bomb extends AbstractBomb {
 	}
 
 	@Override
-	protected void afterKill() throws IOException {
+	protected void afterKill() {
 	}
 	//-----------------//
 }

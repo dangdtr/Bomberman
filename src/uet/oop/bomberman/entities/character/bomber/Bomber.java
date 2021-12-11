@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.character.bomber;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Game;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
 import uet.oop.bomberman.modules.Keyboard;
@@ -11,7 +12,7 @@ import java.io.IOException;
 public class Bomber extends Player {
 	private static int VELOCITY = 2;
 	private Sprite prevSprite = Sprite.player_right;
-	public static boolean collide = false;
+//	public static boolean collide = false;
 
 	public Bomber(int x, int y, Image img) {
 		super(x, y, img);
@@ -29,13 +30,14 @@ public class Bomber extends Player {
 	public void kill() {
 	}
 
-	@Override
-	protected void afterKill() throws IOException {
-		if (_time > 0) _time--;
-		if (_time == 0) {
-			resetBomber();
-		}
-	}
+//	@Override
+//	protected void afterKill() throws IOException {
+//
+//		if (_time > 1) _time--;
+//		if (_time == 1) {
+//			resetBomber();
+//		}
+//	}
 
 	public void render(GraphicsContext gc) {
 		gc.drawImage(img, x, y);
@@ -44,8 +46,11 @@ public class Bomber extends Player {
 	@Override
 	public void update() throws IOException {
 		if (!alive) {
-			sprite = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, _animate, _time);
+			sprite = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, _animate, Game.TIME_TO_DISAPPEAR);
 			afterKill();
+			if (this.isDestroyed()) {
+				resetBomber();
+			}
 		}
 		if (alive) {
 			chooseSprite();
@@ -87,18 +92,6 @@ public class Bomber extends Player {
 			x += dx * VELOCITY;
 			y += dy * VELOCITY;
 
-//            if (dx < 0 && canMoveLeft(dx, dy, this)) {
-//                x += dx * VELOCITY;
-//            }
-//            if (dx > 0 && canMoveRight(dx,dy,this)) {
-//                x += dx * VELOCITY;
-//            }
-//            if (dy < 0 && canMoveUp(0, dy, this) ) {
-//                y += dy * VELOCITY;
-//            }
-//            if (dy > 0 && canMoveDown(0, dy, this)) {
-//                y += dy * VELOCITY;
-//            }
 
 		}
 	}

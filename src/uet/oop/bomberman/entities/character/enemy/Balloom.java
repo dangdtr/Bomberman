@@ -8,11 +8,13 @@ import uet.oop.bomberman.entities.character.bomber.Bomber;
 import uet.oop.bomberman.entities.character.enemy.mode.RandomMode;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Objects;
 
 public class Balloom extends Enemy {
 	private int count = 0;
+//	public boolean done = false;
+
 
 	public Balloom(int xUnit, int yUnit, Image img) {
 		super(xUnit, yUnit, img);
@@ -25,16 +27,6 @@ public class Balloom extends Enemy {
 
 	}
 
-	@Override
-	protected void afterKill() {
-		sprite = Sprite.balloom_dead;
-		if (_time > 0) _time--;
-		if (_time == 0) {
-			moving = false;
-			Game.entityList.removeIf(entity -> Objects.equals(entity, this));
-			if (Game.entityList.size() == 0) Game.entityList = new ArrayList<>();
-		}
-	}
 
 	private void calculateMove() {
 		count++;
@@ -66,15 +58,19 @@ public class Balloom extends Enemy {
 	}
 
 	protected void chooseSprite() {
-		switch (direction) {
-			case 0:
-			case 1:
-				sprite = Sprite.movingSprite(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3, _animate, 60);
-				break;
-			case 2:
-			case 3:
-				sprite = Sprite.movingSprite(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3, _animate, 60);
-				break;
+		if (!this.isDie()) {
+			switch (direction) {
+				case 0:
+				case 1:
+					sprite = Sprite.movingSprite(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3, _animate, _time);
+					break;
+				case 2:
+				case 3:
+					sprite = Sprite.movingSprite(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3, _animate, _time);
+					break;
+			}
+		} else {
+			sprite = Sprite.balloom_dead;
 		}
 	}
 
@@ -88,20 +84,21 @@ public class Balloom extends Enemy {
 	}
 
 	@Override
-	public void update() {
+	public void update() throws IOException {
 		if (Bomber.alive) {
 			killBomber();
 		}
+		if (this.isDie()) {
+			afterKill();
+		}
+		chooseSprite();
 		animate();
 		calculateMove();
 		setImg(sprite.getFxImage());
 	}
 
 	public void render(GraphicsContext gc) {
-		if (isDie()) {
-			afterKill();
-		}
-		chooseSprite();
+
 		gc.drawImage(img, x, y);
 	}
 }

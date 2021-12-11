@@ -4,16 +4,37 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.AnimatedEntitiy;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.net.ServerSocket;
-
 public abstract class Character extends AnimatedEntitiy {
+	protected boolean _exploding = false;
+	protected int _timeToDisapear = 0;
+	protected boolean _destroyed = false;
+
+	public boolean isDestroyed() {
+		return _destroyed;
+	}
+
 	public Character(int xUnit, int yUnit, Image img) {
 		super(xUnit, yUnit, img);
 	}
+
+
+	@Override
+	protected void afterKill() {
+		if (!_destroyed) {
+			_timeToDisapear++;
+			if (_timeToDisapear < Game.TIME_TO_DISAPPEAR) {
+				_exploding = true;
+			} else {
+				_exploding = false;
+				_timeToDisapear = 0;
+				_destroyed = true;
+			}
+		}
+	}
+
 
 	/**
 	 * Lấy ra entity mà character có thể không đi qua được tại vị trí x, y đã tính toán.
@@ -24,22 +45,19 @@ public abstract class Character extends AnimatedEntitiy {
 	 */
 	protected Entity getImpassableEntityAt(int x, int y) {
 		Entity entity = null;
-		for (Entity e : Game.stillObjects) {
-			if (e.getX() == x && e.getY() == y) {
-				return e;
-			}
-		}
+
 		for (Integer value : Game.getLayeredEntitySet()) {
 			if (Game.LayeredEntity.get(value).peek().getX() == x && Game.LayeredEntity.get(value).peek().getY() == y) {
 				return Game.LayeredEntity.get(value).peek();
 			}
 		}
 
-//		for (Bomb bomb : Game.getBombList()) {
-//			if (bomb.getX() == x && bomb.getY() == y) {
-//				entity = bomb;
-//			}
-//		}
+		for (Entity e : Game.stillObjects) {
+			if (e.getX() == x && e.getY() == y) {
+				return e;
+			}
+		}
+
 
 		return entity;
 	}

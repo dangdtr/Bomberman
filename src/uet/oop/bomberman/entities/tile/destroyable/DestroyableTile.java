@@ -8,7 +8,11 @@ public class DestroyableTile extends Tile {
 	//    protected int _time = 36;
 	protected boolean _exploding = false;
 	protected int _timeToDisapear = 0;
-	public boolean _destroyed = false;
+	protected boolean _destroyed = false;
+
+	public boolean isDestroyed() {
+		return _destroyed;
+	}
 
 	public DestroyableTile(int xUnit, int yUnit, Image img) {
 		super(xUnit, yUnit, img);

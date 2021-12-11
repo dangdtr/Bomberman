@@ -5,8 +5,6 @@ import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.io.IOException;
-
 public abstract class AnimatedEntitiy extends Entity {
 	protected int _animate = 0;
 	protected int _time = 36;
@@ -42,7 +40,7 @@ public abstract class AnimatedEntitiy extends Entity {
 
 	public abstract void kill();
 
-	protected abstract void afterKill() throws IOException;
+	protected abstract void afterKill();
 
 	protected void animate() {
 		if (_animate < MAX_ANIMATE) _animate++;

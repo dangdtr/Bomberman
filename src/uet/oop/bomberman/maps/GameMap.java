@@ -79,6 +79,7 @@ public class GameMap {
 						layer.add(new Grass(j, i, Sprite.grass.getFxImage()));
 						layer.add(new Brick(j, i, Sprite.brick.getFxImage()));
 						Game.LayeredEntity.put(Game.generateKey(j, i), layer);
+						Game.stillObjects.add(new Grass(j, i, Sprite.grass.getFxImage()));
 						break;
 					case 'p':
 						Bomber bomber = new Bomber(j, i, Sprite.player_right.getFxImage());

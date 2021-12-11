@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities.tile.destroyable;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Game;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Brick extends DestroyableTile {
@@ -25,11 +26,10 @@ public class Brick extends DestroyableTile {
 	private void handleBrick() {
 		if (!_destroyed) {
 			_timeToDisapear++;
-			if (_timeToDisapear < 50) {
+			if (_timeToDisapear < Game.TIME_TO_DISAPPEAR) {
 				_exploding = true;
 			} else {
 				_exploding = false;
-				System.out.println("done brick");
 				_timeToDisapear = 0;
 				_destroyed = true;
 			}
@@ -38,13 +38,18 @@ public class Brick extends DestroyableTile {
 	}
 
 	private void animate() {
-		if (_animate < 120) _animate++;
+		if (_animate < 7500) _animate++;
 		else _animate = 0;
 	}
 
 	private void chooseSprite() {
+		int _time = Game.TIME_TO_DISAPPEAR;
 		if (_exploding) {
-			sprite = Sprite.movingSprite(Sprite.brick_exploded, Sprite.brick_exploded1, Sprite.brick_exploded2, _animate, 200);
+			sprite = Sprite.movingSprite(
+					Sprite.brick_exploded,
+					Sprite.brick_exploded1,
+					Sprite.brick_exploded2,
+					_animate, _time);
 		} else {
 			sprite = Sprite.brick;
 		}

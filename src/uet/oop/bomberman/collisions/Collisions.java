@@ -11,16 +11,37 @@ public class Collisions {
 		int topA, topB;
 		int bottomA, bottomB;
 
-		leftB = B.getX() - 6;
-		rightB = leftB + Sprite.SCALED_SIZE + 6;
-		topB = B.getY() - 6;
-		bottomB = topB + 6 + Sprite.SCALED_SIZE;
+		leftB = B.getX();
+		rightB = leftB + Sprite.SCALED_SIZE;
+		topB = B.getY();
+		bottomB = topB + Sprite.SCALED_SIZE;
 
 		leftA = A.getX();
 		rightA = A.getX() + Sprite.SCALED_SIZE;
 		topA = A.getY();
 		bottomA = A.getY() + Sprite.SCALED_SIZE;
 
-        return !((bottomA <= topB) || (topA >= bottomB) || (rightA <= leftB) || (leftA >= rightB));
-    }
+		return !((bottomA <= topB) || (topA >= bottomB) || (rightA <= leftB) || (leftA >= rightB));
+	}
+
+	public static boolean checkCollisionWithBuffer(Entity A, Entity B) {
+		int leftA, leftB;
+		int rightA, rightB;
+		int topA, topB;
+		int bottomA, bottomB;
+
+		int buf = 6;
+
+		leftB = B.getX();
+		rightB = leftB + Sprite.SCALED_SIZE;
+		topB = B.getY();
+		bottomB = topB + Sprite.SCALED_SIZE;
+
+		leftA = A.getX() - buf;
+		rightA = A.getX() + Sprite.SCALED_SIZE + buf;
+		topA = A.getY() - buf;
+		bottomA = A.getY() + Sprite.SCALED_SIZE + buf;
+
+		return !((bottomA <= topB) || (topA >= bottomB) || (rightA <= leftB) || (leftA >= rightB));
+	}
 }

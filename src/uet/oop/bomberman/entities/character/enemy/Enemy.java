@@ -9,9 +9,11 @@ import uet.oop.bomberman.entities.character.enemy.mode.AI;
 
 public abstract class Enemy extends Character {
 	protected AI ai;
-	protected int speed = 2;
+	protected int speed = Game.SPEED_OF_ENEMY;
 	protected int direction = -1;
-	private boolean isDie = false;
+	protected boolean isDie = false;
+
+
 	public Enemy(int xUnit, int yUnit, Image img) {
 		super(xUnit, yUnit, img);
 	}
@@ -19,6 +21,7 @@ public abstract class Enemy extends Character {
 	public boolean isDie() {
 		return isDie;
 	}
+
 	public void enemyDie() {
 		isDie = true;
 	}

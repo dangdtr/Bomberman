@@ -1,10 +1,9 @@
 package uet.oop.bomberman.entities.bomb;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.AnimatedEntitiy;
 import uet.oop.bomberman.graphics.Sprite;
-
-import java.io.IOException;
 
 public class Flame extends AnimatedEntitiy {
 	private String status;
@@ -23,18 +22,19 @@ public class Flame extends AnimatedEntitiy {
 
 	@Override
 	public void update() {
-		chooseSprite();
 		animateFlame();
+
+		chooseSprite();
 		setImg(sprite.getFxImage());
 	}
 
 	private void animateFlame() {
-		if (_animate < 120) _animate++;
+		if (_animate < 7500) _animate++;
 		else _animate = 0;
 	}
 
 	private void chooseSprite() {
-		_time = 180;
+		_time = Game.TIME_TO_EXPLOSION_BOMB;
 		switch (status) {
 			case "LEFT_LAST":
 				sprite =
@@ -116,7 +116,7 @@ public class Flame extends AnimatedEntitiy {
 	}
 
 	@Override
-	protected void afterKill() throws IOException {
+	protected void afterKill() {
 
 	}
 	//-----------------//

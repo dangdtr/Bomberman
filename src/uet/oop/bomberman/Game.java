@@ -30,14 +30,18 @@ import java.util.*;
 
 public class Game extends Application {
 
-	public static final int WIDTH = 20;
-	public static final int HEIGHT = 15;
+	public static final int WIDTH = 31;
+	public static final int HEIGHT = 13;
 	private GraphicsContext gc;
 	private Canvas canvas;
 
 	public static int LENGTH_OF_FLAME = 1;
 	public static int NUMBER_OF_BOMBS = 1;
 
+	public static final int TIME_TO_DISAPPEAR = 100;
+	public static final int TIME_TO_EXPLOSION_BOMB = 300; // 2s
+
+	public static final int SPEED_OF_ENEMY = 1;
 
 	public static List<AnimatedEntitiy> entityList = new ArrayList<>();
 	public static List<Entity> stillObjects = new ArrayList<>();
@@ -74,12 +78,13 @@ public class Game extends Application {
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle(long l) {
+				render();
+
 				try {
 					update();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				render();
 			}
 		};
 		timer.start();
@@ -90,14 +95,7 @@ public class Game extends Application {
 			public void handle(KeyEvent event) {
 				Keyboard.setInputKeyEvent(event);
 				if (Keyboard.SPACE && NUMBER_OF_BOMBS != 0) {
-					System.out.println("create");
-					bomberman = getBomber();
-					int tmpX = Math.round((bomberman.getX() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE);
-					int tmpY = Math.round((bomberman.getY() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE);// Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
-					Bomb bomb = new Bomb(tmpX, tmpY, Sprite.bomb.getFxImage());
-					bombList.add(bomb);
-
-					NUMBER_OF_BOMBS--;
+					createBomb();
 				}
 			}
 		});
@@ -111,8 +109,20 @@ public class Game extends Application {
 		GameMap.createMap();
 	}
 
+	/**
+	 * Tạo bomb tại vị trí mới và add vào bombList.
+	 */
+	private void createBomb() {
+		bomberman = getBomber();
+		int tmpX = (bomberman.getX() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+		int tmpY = (bomberman.getY() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
+		Bomb bomb = new Bomb(tmpX, tmpY, Sprite.bomb.getFxImage());
+		bombList.add(bomb);
+		NUMBER_OF_BOMBS--;
+	}
 
-	//===================================update area ===================================//
+
+	//=================================== update area ===================================//
 	public void update() throws IOException {
 		entitiesUpdate();
 		bombUpdate();
@@ -120,36 +130,105 @@ public class Game extends Application {
 	}
 
 	private void entitiesUpdate() throws IOException {
-		if (!entityList.isEmpty()) {
-			for (AnimatedEntitiy animatedEntitiy : entityList) {
-				if (animatedEntitiy != null && !(animatedEntitiy instanceof Bomber)) {
-					animatedEntitiy.update();
+		Iterator<AnimatedEntitiy> iterator = Game.entityList.iterator();
+		while (iterator.hasNext()) {
+			AnimatedEntitiy animatedEntitiy = iterator.next();
+			if (animatedEntitiy != null && !(animatedEntitiy instanceof Bomber)) {
+				animatedEntitiy.update();
+				if (((Enemy) animatedEntitiy).isDestroyed()) {
+					iterator.remove();
 				}
 			}
-			Objects.requireNonNull(getBomber()).update();
+		}
+		Objects.requireNonNull(getBomber()).update();
+
+	}
+
+
+	/**
+	 * Câp nhật về bomb:
+	 * - Bomb nổ hay chưa?
+	 * - Nổ vào brick thì thế nào -> cập nhật brick
+	 * - Nổ vào người, nổ vào quái.
+	 * -
+	 */
+	private void bombUpdate() {
+		for (Bomb bomb : bombList) {
+			if (bomb != null) {
+				bomb.update();
+				if (!bomb._destroyed && bomb._exploding) {
+					for (int i = 0; i < bomb.getFlameList().size(); i++) {
+						bomb.getFlameList().get(i).update();
+
+						//Kiểm tra và xử lí nếu flame chạm vào brick không.
+						int xFlame = bomb.getFlameList().get(i).getX() / Sprite.SCALED_SIZE;
+						int yFlame = bomb.getFlameList().get(i).getY() / Sprite.SCALED_SIZE;
+						if (LayeredEntity.containsKey(generateKey(xFlame, yFlame))) {
+							Stack<Entity> tiles = LayeredEntity.get(generateKey(xFlame, yFlame));
+							if (tiles.peek() instanceof Brick) {
+								Brick brick = (Brick) tiles.peek();
+								brick.setExploded(true);
+								brick.update();
+								if (brick.isDestroyed()) {
+									tiles.pop();
+								}
+							}
+						}
+
+						//Kiểm tra và xử lí nếu flame chạm vào người chơi hoặc quái.
+						Iterator<AnimatedEntitiy> itr = Game.entityList.iterator();
+						AnimatedEntitiy cur;
+						while (itr.hasNext()) {
+							cur = itr.next();
+							if (cur instanceof Enemy) {
+								if (Collisions.checkCollision(cur, bomb.getFlameList().get(i))) {
+									((Enemy) cur).enemyDie();
+								}
+							}
+							if (cur instanceof Bomber) {
+								if (Collisions.checkCollision(cur, bomb.getFlameList().get(i))) {
+//									((Bomber) cur).ali;
+
+
+									//biến static -> cần sửa
+									Bomber.alive = false;
+								}
+							}
+						}
+
+
+					}
+				}
+				if (bomb._destroyed && NUMBER_OF_BOMBS < 1) {
+					NUMBER_OF_BOMBS++;
+				}
+
+			}
 		}
 	}
 
+	/**
+	 * Cập nhật item khi có va chạm với người chơi.
+	 */
 	private void itemUpdate() {
 		if (!LayeredEntity.isEmpty()) {
 			for (Integer value : getLayeredEntitySet()) {
 				if (LayeredEntity.get(value).peek() instanceof FlameItem
-						&& Collisions.checkCollision(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
+						&& Collisions.checkCollisionWithBuffer(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
 					Game.LENGTH_OF_FLAME++;
 					LayeredEntity.get(value).pop();
-					System.out.println("pop");
 					FlameItem.timeItem = 0;
 					FlameItem.isPickUp = true;
 				}
 				if (LayeredEntity.get(value).peek() instanceof SpeedItem
-						&& Collisions.checkCollision(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
+						&& Collisions.checkCollisionWithBuffer(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
 					LayeredEntity.get(value).pop();
 					Bomber.setVELOCITY(3);
 					SpeedItem.timeItem = 0;
 					SpeedItem.isPickUp = true;
 				}
 				if (LayeredEntity.get(value).peek() instanceof BombItem
-						&& Collisions.checkCollision(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
+						&& Collisions.checkCollisionWithBuffer(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
 					LayeredEntity.get(value).pop();
 					NUMBER_OF_BOMBS = 2;
 					BombItem.timeItem = 0;
@@ -158,18 +237,15 @@ public class Game extends Application {
 			}
 			if (FlameItem.isPickUp) {
 				FlameItem.timeItem++;
-//                System.out.println(FlameItem.timeItem);
 				if (FlameItem.timeItem > 2000) {
 					FlameItem.timeItem = 0;
 					Game.LENGTH_OF_FLAME = 1;
-//                    System.out.println(Flame.lenOfFlame);
 
 					FlameItem.isPickUp = false;
 				}
 			}
 			if (SpeedItem.isPickUp) {
 				SpeedItem.timeItem++;
-//                System.out.println(SpeedItem.timeItem);
 				if (SpeedItem.timeItem > 2000) {
 					SpeedItem.timeItem = 0;
 					Bomber.setVELOCITY(2);
@@ -188,45 +264,6 @@ public class Game extends Application {
 		}
 	}
 
-	/**
-	 * Câp nhật về bomb:
-	 * - Bomb nổ hay chưa?
-	 * - Nổ vào brick thì thế nào -> cập nhật brick
-	 * - Nổ vào người, nổ vào quái.
-	 */
-	private void bombUpdate() {
-		for (Bomb bomb : bombList) {
-			//bomb = GameMap.getBomber();
-			if (bomb != null) {
-//            System.out.println(numberOfBomb);
-				bomb.update();
-				if (!bomb._destroyed && bomb._exploding) {
-					for (int i = 0; i < bomb.getFlameList().size(); i++) {
-						bomb.getFlameList().get(i).update();
-						int xFlame = bomb.getFlameList().get(i).getX() / Sprite.SCALED_SIZE;
-						int yFlame = bomb.getFlameList().get(i).getY() / Sprite.SCALED_SIZE;
-						if (LayeredEntity.containsKey(generateKey(xFlame, yFlame))) {
-							Stack<Entity> tiles = LayeredEntity.get(generateKey(xFlame, yFlame));
-							if (tiles.peek() instanceof Brick) {
-								Brick brick = (Brick) tiles.peek();
-								brick.setExploded(true);
-								brick.update();
-								if (brick._destroyed) {
-									System.out.println("___");
-									tiles.pop();
-								}
-							}
-						}
-					}
-				}
-				if (bomb._destroyed && NUMBER_OF_BOMBS < 1) {
-					NUMBER_OF_BOMBS++;
-				}
-
-			}
-		}
-	}
-
 	//=================================== Render area ===================================//
 
 	public void render() {
@@ -234,15 +271,21 @@ public class Game extends Application {
 		for (Entity stillObject : stillObjects) {
 			stillObject.render(gc);
 		}
+
 		if (!LayeredEntity.isEmpty()) {
 			for (Integer value : getLayeredEntitySet()) {
 				LayeredEntity.get(value).peek().render(gc);
 			}
 		}
-		for (AnimatedEntitiy g : entityList) {
-			g.render(gc);
-		}
 		bombRender();
+
+
+		Iterator<AnimatedEntitiy> animatedEntitiyIterator = entityList.iterator();
+		while (animatedEntitiyIterator.hasNext()) {
+			AnimatedEntitiy animatedEntitiy = animatedEntitiyIterator.next();
+			if (animatedEntitiy != null)
+				animatedEntitiy.render(gc);
+		}
 	}
 
 	/**
