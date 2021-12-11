@@ -29,10 +29,10 @@ public class Oneal extends Enemy {
 	}
 
 	public void killBomber() {
-		if (Bomber.alive) {
+		if (Objects.requireNonNull(Game.getBomber()).isAlive()) {
 			if (Collisions.checkCollision(this, Objects.requireNonNull(Game.getBomber()))) {
 //                Bomber.alive = false;
-				Bomber.alive = true;
+				Game.getBomber().setAlive(false);
 
 			}
 		}
@@ -66,7 +66,7 @@ public class Oneal extends Enemy {
 
 	@Override
 	public void update() {
-		if (Bomber.alive) {
+		if (Objects.requireNonNull(Game.getBomber()).isAlive()) {
 			killBomber();
 		}
 		if (this.isDie()) {

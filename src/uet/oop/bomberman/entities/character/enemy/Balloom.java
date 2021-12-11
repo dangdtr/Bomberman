@@ -77,17 +77,17 @@ public class Balloom extends Enemy {
 	}
 
 	public void killBomber() {
-		if (Bomber.alive) {
+		if (Objects.requireNonNull(Game.getBomber()).isAlive()) {
 			if (Collisions.checkCollision(this, Objects.requireNonNull(Game.getBomber()))) {
 //                Bomber.alive = false;
-				Bomber.alive = true;
+				Game.getBomber().setAlive(false);
 			}
 		}
 	}
 
 	@Override
 	public void update() throws IOException {
-		if (Bomber.alive) {
+		if (Objects.requireNonNull(Game.getBomber()).isAlive()) {
 			killBomber();
 		}
 		if (this.isDie()) {

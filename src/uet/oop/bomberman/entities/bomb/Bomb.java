@@ -54,7 +54,7 @@ public class Bomb extends AbstractBomb {
 					if (!bomb._destroyed && bomb._exploding) {
 						for (int i = 0; i < bomb.getFlameList().size(); i++) {
 							if (Collisions.checkCollision(bomb.getFlameList().get(i), Objects.requireNonNull(Game.getBomber()))) {
-								Bomber.alive = false;
+								Game.getBomber().setAlive(false);
 								break;
 							}
 						}

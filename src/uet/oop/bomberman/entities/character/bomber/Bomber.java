@@ -22,7 +22,7 @@ public class Bomber extends Player {
 	public void resetBomber() throws IOException {
 		img = Sprite.player_right.getFxImage();
 		moving = false;
-		alive = true;
+		setAlive(true);
 		GameMap.initMap();
 	}
 
@@ -45,7 +45,7 @@ public class Bomber extends Player {
 
 	@Override
 	public void update() throws IOException {
-		if (!alive) {
+		if (!isAlive()) {
 			afterKill();
 			if (this.isDestroyed()) {
 				resetBomber();
@@ -62,7 +62,7 @@ public class Bomber extends Player {
 	}
 
 	private void calculateMove() {
-		if (alive) {
+		if (isAlive()) {
 			int dx = 0;
 			int dy = 0;
 			if (Keyboard.UP) {
@@ -95,7 +95,7 @@ public class Bomber extends Player {
 
 
 	private void chooseSprite() {
-		if (alive){
+		if (isAlive()){
 			if (Keyboard.UP) {
 				sprite = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, _animate, _time);
 				prevSprite = Sprite.player_up;

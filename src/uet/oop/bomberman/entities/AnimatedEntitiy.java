@@ -9,7 +9,6 @@ public abstract class AnimatedEntitiy extends Entity {
 	protected int _animate = 0;
 	protected int _time = 36;
 	protected boolean moving = true;
-	public static boolean alive = true;
 	protected final int MAX_ANIMATE = 7500;
 	protected final int SIZE = Sprite.SCALED_SIZE - 6;//3/4 * Sprite.SCALED_SIZE;
 

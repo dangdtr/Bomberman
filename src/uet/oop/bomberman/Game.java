@@ -16,6 +16,7 @@ import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.bomb.Flame;
 import uet.oop.bomberman.entities.character.bomber.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
+import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.entities.tile.item.BombItem;
 import uet.oop.bomberman.entities.tile.item.FlameItem;
@@ -128,6 +129,7 @@ public class Game extends Application {
 		entitiesUpdate();
 		bombUpdate();
 		itemUpdate();
+		portalUpdate();
 	}
 
 	private void entitiesUpdate() throws IOException {
@@ -178,11 +180,7 @@ public class Game extends Application {
 							}
 							if (cur instanceof Bomber) {
 								if (Collisions.checkCollision(cur, flame) && bomb.isExploding()) {
-//									((Bomber) cur).ali;
-
-
-									//biến static -> cần sửa
-									Bomber.alive = false;
+									((Bomber) cur).setAlive(false);
 								}
 							}
 						}
@@ -272,6 +270,30 @@ public class Game extends Application {
 		}
 	}
 
+	private void portalUpdate() throws IOException {
+		int count_enemy = 0;
+		Iterator<AnimatedEntitiy> itr = entityList.iterator();
+		while (itr.hasNext()) {
+			AnimatedEntitiy e = itr.next();
+			if (e instanceof Enemy) {
+				count_enemy++;
+			}
+		}
+
+		if (count_enemy == 0) {
+			if (!LayeredEntity.isEmpty()) {
+				for (Integer value : getLayeredEntitySet()) {
+					if (LayeredEntity.get(value).peek() instanceof Portal
+							&& Collisions.checkCollisionWithBuffer(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
+						((Portal) LayeredEntity.get(value).peek()).setCanPass(true);
+						GameMap.setGameLevel(GameMap.getGameLevel()+1);
+						GameMap.createMap(GameMap.getGameLevel());
+					}
+				}
+			}
+		}
+	}
+
 	//=================================== Render area ===================================//
 
 	public void render() {
@@ -341,16 +363,6 @@ public class Game extends Application {
 	public static Bomb getBomb() {
 		if (bombList.isEmpty()) return null;
 		return getBombList().get(0);
-	}
-
-	public static Entity getEntityAt(int x, int y) {
-		Entity entity = null;
-		for (Entity e : Game.entityList) {
-			if (e.getX() == x && e.getY() == y) {
-				entity = e;
-			}
-		}
-		return entity;
 	}
 
 	public static Enemy getEnemy() {

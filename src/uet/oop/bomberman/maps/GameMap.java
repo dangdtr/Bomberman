@@ -35,7 +35,7 @@ public class GameMap {
 		return gameLevel;
 	}
 
-	public void setGameLevel(int gameLevel) {
+	public static void setGameLevel(int gameLevel) {
 		GameMap.gameLevel = gameLevel;
 	}
 

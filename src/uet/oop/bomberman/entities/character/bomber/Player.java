@@ -5,10 +5,18 @@ import uet.oop.bomberman.entities.character.Character;
 
 
 public abstract class Player extends Character {
+	private boolean alive = true;
 	public Player(int xUnit, int yUnit, Image img) {
 		super(xUnit, yUnit, img);
 	}
 
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
 	//cái này sẽ custome tiếp theo pixel nhân nhân vật
 	/*
 	private Entity getImpassableEntityAt(int x, int y) {
