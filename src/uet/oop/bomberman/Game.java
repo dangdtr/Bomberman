@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.AnimatedEntitiy;
@@ -24,6 +25,10 @@ import uet.oop.bomberman.entities.tile.item.Item;
 import uet.oop.bomberman.entities.tile.item.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.maps.GameMap;
+import uet.oop.bomberman.menu.AboutOption;
+import uet.oop.bomberman.menu.HelpOption;
+import uet.oop.bomberman.menu.MainMenu;
+import uet.oop.bomberman.menu.PauseMenu;
 import uet.oop.bomberman.modules.Keyboard;
 
 import java.io.IOException;
@@ -32,7 +37,7 @@ import java.util.*;
 
 public class Game extends Application {
 
-	public static final int WIDTH = 31;
+	public static final int WIDTH = 20;
 	public static final int HEIGHT = 13;
 	private GraphicsContext gc;
 	private Canvas canvas;
@@ -57,6 +62,11 @@ public class Game extends Application {
 	private Bomber bomberman;
 	public static List<Bomb> bombList = new ArrayList<Bomb>();
 
+	MainMenu mainMenu = new MainMenu();
+	PauseMenu pauseMenu = new PauseMenu();
+	HelpOption helpOption = new HelpOption();
+	AboutOption aboutOption = new AboutOption();
+
 
 	@Override
 	public void start(Stage stage) throws IOException {
@@ -73,42 +83,165 @@ public class Game extends Application {
 
 		stage.setTitle("BOMBERMAN GAME");
 
+		Scene mainMenuScene = mainMenu.create();
+		Scene pauseMenuScene = pauseMenu.create();
+		Scene helpOptionScene = helpOption.create();
+		Scene aboutOptionScene = aboutOption.create();
 		// Them scene vao stage
-		stage.setScene(scene);
+		stage.setScene(mainMenuScene);
 		stage.show();
+
+
+		boolean[] running = {false};
+
+//		if (MainMenu.PLAY) {
+//			stage.setScene(scene);
+//		}
+
 
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle(long l) {
-				render();
+				mainMenuScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent mouseEvent) {
+						if (MainMenu.PLAY) {
+							stage.setScene(scene);
+							MainMenu.PLAY = false;
+							running[0] = true;
+						}
+						if (MainMenu.HELP) {
+							stage.setScene(helpOptionScene);
+						}
+						if (MainMenu.ABOUT) {
+							stage.setScene(aboutOptionScene);
+							MainMenu.ABOUT = false;
+						}
 
-				try {
-					update();
-				} catch (IOException e) {
-					e.printStackTrace();
+					}
+				});
+
+				helpOptionScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent mouseEvent) {
+						if (HelpOption.HELP_BACK && MainMenu.HELP) {
+							stage.setScene(mainMenuScene);
+							HelpOption.HELP_BACK = false;
+							MainMenu.HELP = false;
+						} else if (HelpOption.HELP_BACK && PauseMenu.HELP) {
+							stage.setScene(pauseMenuScene);
+							HelpOption.HELP_BACK = false;
+							PauseMenu.HELP = false;
+						}
+					}
+				});
+
+				aboutOptionScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent mouseEvent) {
+						if (AboutOption.ABOUT_BACK) {
+							stage.setScene(mainMenuScene);
+							AboutOption.ABOUT_BACK = false;
+							MainMenu.ABOUT = false;
+						}
+					}
+				});
+
+				pauseMenuScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent mouseEvent) {
+						if (PauseMenu.CONTINUE) {
+							running[0] = true;
+							stage.setScene(scene);
+							Keyboard.PAUSE = !Keyboard.PAUSE;
+							PauseMenu.CONTINUE = false;
+						}
+						if (PauseMenu.HELP) {
+							stage.setScene(helpOptionScene);
+						}
+						if (PauseMenu.RESTART) {
+							try {
+								createNewGame();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							running[0] = true;
+							stage.setScene(scene);
+							Keyboard.PAUSE = !Keyboard.PAUSE;
+							PauseMenu.RESTART = false;
+						}
+						if (PauseMenu.MAIN_MAIN) {
+							try {
+								createNewGame();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							running[0] = false;
+							stage.setScene(mainMenuScene);
+							Keyboard.PAUSE = !Keyboard.PAUSE;
+							PauseMenu.MAIN_MAIN = false;
+						}
+
+					}
+				});
+
+				pauseMenuScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+					@Override
+					public void handle(KeyEvent event) {
+						if (Keyboard.PAUSE) {
+							running[0] = true;
+							stage.setScene(scene);
+							Keyboard.PAUSE = !Keyboard.PAUSE;
+							PauseMenu.CONTINUE = false;
+						}
+					}
+				});
+
+				scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+					@Override
+					public void handle(KeyEvent event) {
+						Keyboard.setInputKeyEvent(event);
+						//							stage.setScene(menuScene);
+						if (running[0] && Keyboard.PAUSE) {
+							running[0] = false;
+							stage.setScene(pauseMenuScene);
+						}
+
+						if (running[0]) {
+							if (Keyboard.SPACE && NUMBER_OF_BOMBS != 0) {
+								createBomb();
+							}
+						}
+					}
+				});
+
+				scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+					@Override
+					public void handle(KeyEvent event) {
+						//							stage.setScene(menuScene);
+						running[0] = !Keyboard.PAUSE;
+
+						if (running[0]) {
+							Keyboard.setInputKeyEvent(event);
+						}
+					}
+				});
+
+				if (running[0]) {
+					System.out.println("ud");
+					try {
+						update();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					render();
 				}
 			}
 		};
 		timer.start();
 
 
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				Keyboard.setInputKeyEvent(event);
-				if (Keyboard.SPACE && NUMBER_OF_BOMBS != 0) {
-					createBomb();
-				}
-			}
-		});
-
-		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				Keyboard.setInputKeyEvent(event);
-			}
-		});
-		GameMap.createMap();
+		GameMap.initMap();
 	}
 
 	/**
@@ -156,7 +289,7 @@ public class Game extends Application {
 	 * -
 	 */
 	private void bombUpdate() {
-		System.out.println(NUMBER_OF_BOMBS);
+//		System.out.println(NUMBER_OF_BOMBS);
 
 		Iterator<Bomb> bombIterator = bombList.iterator();
 		while (bombIterator.hasNext()) {
@@ -174,12 +307,12 @@ public class Game extends Application {
 						while (itr.hasNext()) {
 							cur = itr.next();
 							if (cur instanceof Enemy) {
-								if (Collisions.checkCollision(cur, flame) && bomb.isExploding()) {
+								if (Collisions.checkCollision(cur, flame)){// && bomb.isExploding()) {
 									((Enemy) cur).enemyDie();
 								}
 							}
 							if (cur instanceof Bomber) {
-								if (Collisions.checkCollision(cur, flame) && bomb.isExploding()) {
+								if (Collisions.checkCollision(cur, flame)){// && bomb.isExploding()) {
 									((Bomber) cur).setAlive(false);
 								}
 							}
@@ -201,7 +334,7 @@ public class Game extends Application {
 						}
 					}
 				}
-				if (bomb.isDestroyed()){// && NUMBER_OF_BOMBS < 1) {
+				if (bomb.isDestroyed()) {// && NUMBER_OF_BOMBS < 1) {
 					NUMBER_OF_BOMBS++;
 					bombIterator.remove();
 				}
@@ -276,24 +409,36 @@ public class Game extends Application {
 		while (itr.hasNext()) {
 			AnimatedEntitiy e = itr.next();
 			if (e instanceof Enemy) {
-				count_enemy++;
+//				count_enemy++;
 			}
 		}
 
 		if (count_enemy == 0) {
+			boolean canNextGame = false;
 			if (!LayeredEntity.isEmpty()) {
 				for (Integer value : getLayeredEntitySet()) {
+
 					if (LayeredEntity.get(value).peek() instanceof Portal
 							&& Collisions.checkCollisionWithBuffer(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
-						((Portal) LayeredEntity.get(value).peek()).setCanPass(true);
-						GameMap.setGameLevel(GameMap.getGameLevel()+1);
-						GameMap.createMap(GameMap.getGameLevel());
+						canNextGame = true;
+						break;
 					}
 				}
+			}
+			if (canNextGame) {
+				GameMap.setGameLevel(GameMap.getGameLevel() + 1);
+				GameMap.clear();
+				GameMap.initMap();
 			}
 		}
 	}
 
+	private void createNewGame() throws IOException {
+//		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		GameMap.setGameLevel(GameMap.getGameLevel());
+		GameMap.clear();
+		GameMap.initMap();
+	}
 	//=================================== Render area ===================================//
 
 	public void render() {

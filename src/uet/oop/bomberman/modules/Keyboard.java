@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent;
  */
 public class Keyboard {
 
-	public static boolean UP, LEFT, RIGHT, DOWN, SPACE;
+	public static boolean UP, LEFT, RIGHT, DOWN, SPACE, PAUSE;
 
 	public static void setInputKeyEvent(javafx.scene.input.KeyEvent event) {
 		if (event.getEventType() == KeyEvent.KEY_PRESSED) {
@@ -31,12 +31,11 @@ public class Keyboard {
 		if (event.getEventType() == KeyEvent.KEY_PRESSED) {
 			if (event.getCode() == KeyCode.SPACE) {
 				SPACE = true;
-//                System.out.println("space");
+			} else if (event.getCode() == KeyCode.ESCAPE) {
+				PAUSE = !PAUSE;
 			}
 		} else {
 			SPACE = false;
-//            System.out.println("not");
-
 		}
 	}
 

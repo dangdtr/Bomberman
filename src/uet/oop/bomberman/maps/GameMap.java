@@ -62,6 +62,14 @@ public class GameMap {
 		map = new char[getHeightMap()][getWidthMap()];
 		createMap(getGameLevel());
 	}
+	public static void clear() throws IOException {
+		Game.entityList.clear();
+		Game.stillObjects.clear();
+		Game.LayeredEntity.clear();
+		Game.bombList.clear();
+		Game.NUMBER_OF_BOMBS = 1;
+		map = new char[getHeightMap()][getWidthMap()];
+	}
 
 	public static void createMap(int gameLevel) throws IOException {
 		fileLoad(gameLevel);

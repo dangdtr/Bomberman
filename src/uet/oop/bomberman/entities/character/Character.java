@@ -78,11 +78,11 @@ public abstract class Character extends AnimatedEntitiy {
 		x2_temp = (y_pos + SIZE - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 		y2_temp = (x_pos - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 
-		if (getImpassableEntityAt(y1_temp, x1_temp) instanceof Portal && getImpassableEntityAt(y2_temp, x2_temp) instanceof Portal) {
-			if (((Portal) getImpassableEntityAt(y1_temp, x1_temp)).isCanPass() && ((Portal) getImpassableEntityAt(y2_temp, x2_temp)).isCanPass()) {
-				return true;
-			}
-		}
+//		if (getImpassableEntityAt(y1_temp, x1_temp) instanceof Portal && getImpassableEntityAt(y2_temp, x2_temp) instanceof Portal) {
+//			if (((Portal) getImpassableEntityAt(y1_temp, x1_temp)).isCanPass() && ((Portal) getImpassableEntityAt(y2_temp, x2_temp)).isCanPass()) {
+//				return true;
+//			}
+//		}
 		return getImpassableEntityAt(y1_temp, x1_temp) instanceof Grass && getImpassableEntityAt(y2_temp, x2_temp) instanceof Grass;
 	}
 
@@ -100,11 +100,11 @@ public abstract class Character extends AnimatedEntitiy {
 
 		x2_temp = (y_pos + SIZE - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 		y2_temp = (x_pos + SIZE + pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
-		if (getImpassableEntityAt(y1_temp, x1_temp) instanceof Portal && getImpassableEntityAt(y2_temp, x2_temp) instanceof Portal) {
-			if (((Portal) getImpassableEntityAt(y1_temp, x1_temp)).isCanPass() && ((Portal) getImpassableEntityAt(y2_temp, x2_temp)).isCanPass()) {
-				return true;
-			}
-		}
+//		if (getImpassableEntityAt(y1_temp, x1_temp) instanceof Portal && getImpassableEntityAt(y2_temp, x2_temp) instanceof Portal) {
+//			if (((Portal) getImpassableEntityAt(y1_temp, x1_temp)).isCanPass() && ((Portal) getImpassableEntityAt(y2_temp, x2_temp)).isCanPass()) {
+//				return true;
+//			}
+//		}
 		return getImpassableEntityAt(y1_temp, x1_temp) instanceof Grass && getImpassableEntityAt(y2_temp, x2_temp) instanceof Grass;
 	}
 
@@ -122,11 +122,11 @@ public abstract class Character extends AnimatedEntitiy {
 
 		x2_temp = (y_pos + SIZE + pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 		y2_temp = (x_pos + SIZE - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
-		if (getImpassableEntityAt(y1_temp, x1_temp) instanceof Portal && getImpassableEntityAt(y2_temp, x2_temp) instanceof Portal) {
-			if (((Portal) getImpassableEntityAt(y1_temp, x1_temp)).isCanPass() && ((Portal) getImpassableEntityAt(y2_temp, x2_temp)).isCanPass()) {
-				return true;
-			}
-		}
+//		if (getImpassableEntityAt(y1_temp, x1_temp) instanceof Portal && getImpassableEntityAt(y2_temp, x2_temp) instanceof Portal) {
+//			if (((Portal) getImpassableEntityAt(y1_temp, x1_temp)).isCanPass() && ((Portal) getImpassableEntityAt(y2_temp, x2_temp)).isCanPass()) {
+//				return true;
+//			}
+//		}
 		return getImpassableEntityAt(y1_temp, x1_temp) instanceof Grass && getImpassableEntityAt(y2_temp, x2_temp) instanceof Grass;
 	}
 
@@ -144,11 +144,11 @@ public abstract class Character extends AnimatedEntitiy {
 
 		x2_temp = (y_pos - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 		y2_temp = (x_pos + SIZE - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
-		if (getImpassableEntityAt(y1_temp, x1_temp) instanceof Portal && getImpassableEntityAt(y2_temp, x2_temp) instanceof Portal) {
-			if (((Portal) getImpassableEntityAt(y1_temp, x1_temp)).isCanPass() && ((Portal) getImpassableEntityAt(y2_temp, x2_temp)).isCanPass()) {
-				return true;
-			}
-		}
+//		if (getImpassableEntityAt(y1_temp, x1_temp) instanceof Portal && getImpassableEntityAt(y2_temp, x2_temp) instanceof Portal) {
+//			if (((Portal) getImpassableEntityAt(y1_temp, x1_temp)).isCanPass() && ((Portal) getImpassableEntityAt(y2_temp, x2_temp)).isCanPass()) {
+//				return true;
+//			}
+//		}
 		return getImpassableEntityAt(y1_temp, x1_temp) instanceof Grass && getImpassableEntityAt(y2_temp, x2_temp) instanceof Grass;
 	}
 }
