@@ -36,7 +36,7 @@ public class Game extends Application {
 	private Canvas canvas;
 
 	public static int LENGTH_OF_FLAME = 1;
-	private static int NUMBER_OF_BOMBS = 1;
+	public static int NUMBER_OF_BOMBS = 1;
 
 
 	public static List<AnimatedEntitiy> entityList = new ArrayList<>();
@@ -126,7 +126,7 @@ public class Game extends Application {
 					animatedEntitiy.update();
 				}
 			}
-			getBomber().update();
+			Objects.requireNonNull(getBomber()).update();
 		}
 	}
 
@@ -134,7 +134,7 @@ public class Game extends Application {
 		if (!LayeredEntity.isEmpty()) {
 			for (Integer value : getLayeredEntitySet()) {
 				if (LayeredEntity.get(value).peek() instanceof FlameItem
-						&& Collisions.checkCollision(getBomber(), LayeredEntity.get(value).peek())) {
+						&& Collisions.checkCollision(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
 					Game.LENGTH_OF_FLAME++;
 					LayeredEntity.get(value).pop();
 					System.out.println("pop");
@@ -142,14 +142,14 @@ public class Game extends Application {
 					FlameItem.isPickUp = true;
 				}
 				if (LayeredEntity.get(value).peek() instanceof SpeedItem
-						&& Collisions.checkCollision(getBomber(), LayeredEntity.get(value).peek())) {
+						&& Collisions.checkCollision(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
 					LayeredEntity.get(value).pop();
-					Bomber.setVELOCITY(2);
+					Bomber.setVELOCITY(3);
 					SpeedItem.timeItem = 0;
 					SpeedItem.isPickUp = true;
 				}
 				if (LayeredEntity.get(value).peek() instanceof BombItem
-						&& Collisions.checkCollision(getBomber(), LayeredEntity.get(value).peek())) {
+						&& Collisions.checkCollision(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
 					LayeredEntity.get(value).pop();
 					NUMBER_OF_BOMBS = 2;
 					BombItem.timeItem = 0;
@@ -161,7 +161,7 @@ public class Game extends Application {
 //                System.out.println(FlameItem.timeItem);
 				if (FlameItem.timeItem > 2000) {
 					FlameItem.timeItem = 0;
-					Game.LENGTH_OF_FLAME--;
+					Game.LENGTH_OF_FLAME = 1;
 //                    System.out.println(Flame.lenOfFlame);
 
 					FlameItem.isPickUp = false;
@@ -172,7 +172,7 @@ public class Game extends Application {
 //                System.out.println(SpeedItem.timeItem);
 				if (SpeedItem.timeItem > 2000) {
 					SpeedItem.timeItem = 0;
-					Bomber.setVELOCITY(1);
+					Bomber.setVELOCITY(2);
 					SpeedItem.isPickUp = false;
 				}
 			}
@@ -283,8 +283,13 @@ public class Game extends Application {
 		return Game.LayeredEntity.keySet();
 	}
 
-	public static List<Bomb> getBomb() {
+	public static List<Bomb> getBombList() {
 		return bombList;
+	}
+
+	public static Bomb getBomb() {
+		if (bombList.isEmpty()) return null;
+		return getBombList().get(0);
 	}
 
 	public static Entity getEntityAt(int x, int y) {

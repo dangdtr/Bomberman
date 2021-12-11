@@ -4,15 +4,19 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.collisions.Collisions;
+import uet.oop.bomberman.entities.AnimatedEntitiy;
 import uet.oop.bomberman.entities.character.bomber.Bomber;
 import uet.oop.bomberman.entities.character.enemy.mode.AI2;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
 
 public class Oneal extends Enemy {
 	//    static GameMap gameMap;
+	public static boolean isDie = false;
 	public Oneal(int xUnit, int yUnit, Image img) {
 		super(xUnit, yUnit, img);
 		sprite = Sprite.oneal_left1;
@@ -38,7 +42,13 @@ public class Oneal extends Enemy {
 
 	@Override
 	protected void afterKill() {
-
+		sprite = Sprite.oneal_dead;
+		if (_time > 0) _time--;
+		if (_time == 0) {
+			moving = false;
+			Game.entityList.removeIf(entitiy -> entitiy.equals(this));
+ 			if (Game.entityList.size() == 0) Game.entityList = new ArrayList<>();
+		}
 	}
 
 	public void calculateMove() {
@@ -75,6 +85,9 @@ public class Oneal extends Enemy {
 	}
 
 	public void render(GraphicsContext gc) {
+		if (isDie()) {
+			afterKill();
+		}
 		chooseSprite();
 		gc.drawImage(img, x, y);
 	}

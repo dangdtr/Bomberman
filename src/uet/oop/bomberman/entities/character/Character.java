@@ -8,6 +8,8 @@ import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.net.ServerSocket;
+
 public abstract class Character extends AnimatedEntitiy {
 	public Character(int xUnit, int yUnit, Image img) {
 		super(xUnit, yUnit, img);
@@ -20,7 +22,7 @@ public abstract class Character extends AnimatedEntitiy {
 	 * @param y vị trí y đã tính toán.
 	 * @return entity tại vị trí đó.
 	 */
-	private Entity getImpassableEntityAt(int x, int y) {
+	protected Entity getImpassableEntityAt(int x, int y) {
 		Entity entity = null;
 		for (Entity e : Game.stillObjects) {
 			if (e.getX() == x && e.getY() == y) {
@@ -32,11 +34,12 @@ public abstract class Character extends AnimatedEntitiy {
 				return Game.LayeredEntity.get(value).peek();
 			}
 		}
-		for (Bomb bomb : Game.bombList) {
-			if (bomb.getX() == x && bomb.getY() == y) {
-				return bomb;
-			}
-		}
+
+//		for (Bomb bomb : Game.getBombList()) {
+//			if (bomb.getX() == x && bomb.getY() == y) {
+//				entity = bomb;
+//			}
+//		}
 
 		return entity;
 	}
@@ -55,7 +58,6 @@ public abstract class Character extends AnimatedEntitiy {
 
 		x2_temp = (y_pos + SIZE - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 		y2_temp = (x_pos - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
-
 		return getImpassableEntityAt(y1_temp, x1_temp) instanceof Grass && getImpassableEntityAt(y2_temp, x2_temp) instanceof Grass;
 	}
 
@@ -73,7 +75,6 @@ public abstract class Character extends AnimatedEntitiy {
 
 		x2_temp = (y_pos + SIZE - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 		y2_temp = (x_pos + SIZE + pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
-
 		return getImpassableEntityAt(y1_temp, x1_temp) instanceof Grass && getImpassableEntityAt(y2_temp, x2_temp) instanceof Grass;
 	}
 
@@ -91,7 +92,6 @@ public abstract class Character extends AnimatedEntitiy {
 
 		x2_temp = (y_pos + SIZE + pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 		y2_temp = (x_pos + SIZE - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
-
 		return getImpassableEntityAt(y1_temp, x1_temp) instanceof Grass && getImpassableEntityAt(y2_temp, x2_temp) instanceof Grass;
 	}
 
@@ -109,7 +109,6 @@ public abstract class Character extends AnimatedEntitiy {
 
 		x2_temp = (y_pos - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
 		y2_temp = (x_pos + SIZE - pixel) / Sprite.SCALED_SIZE * Sprite.SCALED_SIZE;
-
 		return getImpassableEntityAt(y1_temp, x1_temp) instanceof Grass && getImpassableEntityAt(y2_temp, x2_temp) instanceof Grass;
 	}
 }

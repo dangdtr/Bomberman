@@ -8,6 +8,7 @@ import uet.oop.bomberman.entities.character.bomber.Bomber;
 import uet.oop.bomberman.entities.character.enemy.mode.RandomMode;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Balloom extends Enemy {
@@ -26,7 +27,13 @@ public class Balloom extends Enemy {
 
 	@Override
 	protected void afterKill() {
-
+		sprite = Sprite.balloom_dead;
+		if (_time > 0) _time--;
+		if (_time == 0) {
+			moving = false;
+			Game.entityList.removeIf(entity -> Objects.equals(entity, this));
+			if (Game.entityList.size() == 0) Game.entityList = new ArrayList<>();
+		}
 	}
 
 	private void calculateMove() {
@@ -91,6 +98,9 @@ public class Balloom extends Enemy {
 	}
 
 	public void render(GraphicsContext gc) {
+		if (isDie()) {
+			afterKill();
+		}
 		chooseSprite();
 		gc.drawImage(img, x, y);
 	}

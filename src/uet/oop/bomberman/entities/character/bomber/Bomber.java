@@ -9,7 +9,7 @@ import uet.oop.bomberman.modules.Keyboard;
 import java.io.IOException;
 
 public class Bomber extends Player {
-	private static int VELOCITY = 1;
+	private static int VELOCITY = 2;
 	private Sprite prevSprite = Sprite.player_right;
 	public static boolean collide = false;
 
@@ -23,7 +23,6 @@ public class Bomber extends Player {
 		moving = false;
 		alive = true;
 		GameMap.initMap();
-		GameMap.createMap(1);
 	}
 
 	@Override

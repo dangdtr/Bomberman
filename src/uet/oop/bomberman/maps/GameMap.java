@@ -53,11 +53,14 @@ public class GameMap {
 		createMap(getGameLevel());
 	}
 
-	public static void initMap() {
+	public static void initMap() throws IOException {
 		Game.entityList = new ArrayList<>();
 		Game.stillObjects = new ArrayList<>();
 		Game.LayeredEntity = new HashMap<>();
+		Game.bombList = new ArrayList<>();
+		Game.NUMBER_OF_BOMBS = 1;
 		map = new char[getHeightMap()][getWidthMap()];
+		createMap(getGameLevel());
 	}
 
 	public static void createMap(int gameLevel) throws IOException {
