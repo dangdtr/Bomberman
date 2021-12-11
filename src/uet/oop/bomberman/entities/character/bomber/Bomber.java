@@ -46,15 +46,12 @@ public class Bomber extends Player {
 	@Override
 	public void update() throws IOException {
 		if (!alive) {
-			sprite = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, _animate, Game.TIME_TO_DISAPPEAR);
 			afterKill();
 			if (this.isDestroyed()) {
 				resetBomber();
 			}
 		}
-		if (alive) {
-			chooseSprite();
-		}
+		chooseSprite();
 		animate();
 		calculateMove();
 		setImg(sprite.getFxImage());
@@ -98,24 +95,28 @@ public class Bomber extends Player {
 
 
 	private void chooseSprite() {
-		if (Keyboard.UP) {
-			sprite = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, _animate, _time);
-			prevSprite = Sprite.player_up;
-		}
-		if (Keyboard.LEFT) {
-			sprite = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, _animate, _time);
-			prevSprite = Sprite.player_left;
-		}
-		if (Keyboard.DOWN) {
-			sprite = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, _animate, _time);
-			prevSprite = Sprite.player_down;
-		}
-		if (Keyboard.RIGHT) {
-			sprite = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, _animate, _time);
-			prevSprite = Sprite.player_right;
-		}
-		if (!Keyboard.UP && !Keyboard.LEFT && !Keyboard.DOWN && !Keyboard.RIGHT) {
-			sprite = prevSprite;
+		if (alive){
+			if (Keyboard.UP) {
+				sprite = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, _animate, _time);
+				prevSprite = Sprite.player_up;
+			}
+			if (Keyboard.LEFT) {
+				sprite = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, _animate, _time);
+				prevSprite = Sprite.player_left;
+			}
+			if (Keyboard.DOWN) {
+				sprite = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, _animate, _time);
+				prevSprite = Sprite.player_down;
+			}
+			if (Keyboard.RIGHT) {
+				sprite = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, _animate, _time);
+				prevSprite = Sprite.player_right;
+			}
+			if (!Keyboard.UP && !Keyboard.LEFT && !Keyboard.DOWN && !Keyboard.RIGHT) {
+				sprite = prevSprite;
+			}
+		}else {
+			sprite = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, _animate, Game.TIME_TO_DISAPPEAR);
 		}
 	}
 

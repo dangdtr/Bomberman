@@ -29,32 +29,34 @@ public class Balloom extends Enemy {
 
 
 	private void calculateMove() {
-		count++;
-		if (count < 150 && count >= 0) {
-			if (rightable(x, y)) {// && rightableBrick(x, y)) {
-				x += speed;
-				direction = 1;
+		if (!this.isDie()){
+			count++;
+			if (count < 150 && count >= 0) {
+				if (rightable(x, y)) {// && rightableBrick(x, y)) {
+					x += speed;
+					direction = 1;
+				}
 			}
-		}
-		if (count >= 150 && count < 300) {
-			if (leftable(x, y)) {// && leftableBrick(x, y)) {
-				x -= speed;
-				direction = 3;
+			if (count >= 150 && count < 300) {
+				if (leftable(x, y)) {// && leftableBrick(x, y)) {
+					x -= speed;
+					direction = 3;
+				}
 			}
-		}
-		if (count >= 300 && count < 450) {
-			if (upable(x, y)) {// && upableBrick(x,y)) {
-				y -= speed;
-				direction = 0;
+			if (count >= 300 && count < 450) {
+				if (upable(x, y)) {// && upableBrick(x,y)) {
+					y -= speed;
+					direction = 0;
+				}
 			}
-		}
-		if (count >= 450 && count < 600) {
-			if (downable(x, y)) {// && downableBrick(x, y)) {
-				y += speed;
-				direction = 2;
+			if (count >= 450 && count < 600) {
+				if (downable(x, y)) {// && downableBrick(x, y)) {
+					y += speed;
+					direction = 2;
+				}
 			}
+			if (count >= 600) count = ai.calcDirection();
 		}
-		if (count >= 600) count = ai.calcDirection();
 	}
 
 	protected void chooseSprite() {

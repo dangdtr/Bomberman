@@ -42,22 +42,24 @@ public class Oneal extends Enemy {
 	public void calculateMove() {
 		direction = ai.calcDirection();
 
-		if (direction == 0) {
-			if (upable(x, y)) {
-				y -= speed;
-			}
+		if (!this.isDie()){
+			if (direction == 0) {
+				if (upable(x, y)) {
+					y -= speed;
+				}
 
-		} else if (direction == 1) {
-			if (rightable(x, y)) {
-				x += speed;
-			}
-		} else if (direction == 2) {
-			if (downable(x, y)) {
-				y += speed;
-			}
-		} else if (direction == 3) {
-			if (leftable(x, y)) {
-				x -= speed;
+			} else if (direction == 1) {
+				if (rightable(x, y)) {
+					x += speed;
+				}
+			} else if (direction == 2) {
+				if (downable(x, y)) {
+					y += speed;
+				}
+			} else if (direction == 3) {
+				if (leftable(x, y)) {
+					x -= speed;
+				}
 			}
 		}
 	}

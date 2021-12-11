@@ -14,8 +14,8 @@ import java.util.Objects;
 
 public class Bomb extends AbstractBomb {
 	private long _timeToExplode;// = System.currentTimeMillis();
-	public boolean _exploding = false;
-	public boolean _destroyed = false;
+	private boolean _exploding = false;
+	private boolean _destroyed = false;
 	public boolean canPass = true;
 	private final List<Flame> flameList = new ArrayList<>();
 
@@ -27,6 +27,14 @@ public class Bomb extends AbstractBomb {
 		super(xUnit, yUnit, img);
 		_timeToExplode = 0;
 		initAndHandleFlame();
+	}
+
+	public boolean isDestroyed() {
+		return _destroyed;
+	}
+
+	public boolean isExploding() {
+		return _exploding;
 	}
 
 	private void chooseSprite() {

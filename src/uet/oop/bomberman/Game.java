@@ -13,6 +13,7 @@ import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.AnimatedEntitiy;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.entities.bomb.Flame;
 import uet.oop.bomberman.entities.character.bomber.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.entities.tile.destroyable.Brick;
@@ -153,16 +154,42 @@ public class Game extends Application {
 	 * -
 	 */
 	private void bombUpdate() {
-		for (Bomb bomb : bombList) {
+		System.out.println(NUMBER_OF_BOMBS);
+
+		Iterator<Bomb> bombIterator = bombList.iterator();
+		while (bombIterator.hasNext()) {
+			Bomb bomb = bombIterator.next();
 			if (bomb != null) {
 				bomb.update();
-				if (!bomb._destroyed && bomb._exploding) {
+				if (!bomb.isDestroyed() && bomb.isExploding()) {
 					for (int i = 0; i < bomb.getFlameList().size(); i++) {
-						bomb.getFlameList().get(i).update();
+						Flame flame = bomb.getFlameList().get(i);
+						flame.update();
+
+						//Kiểm tra và xử lí nếu flame chạm vào người chơi hoặc quái.
+						Iterator<AnimatedEntitiy> itr = Game.entityList.iterator();
+						AnimatedEntitiy cur;
+						while (itr.hasNext()) {
+							cur = itr.next();
+							if (cur instanceof Enemy) {
+								if (Collisions.checkCollision(cur, flame) && bomb.isExploding()) {
+									((Enemy) cur).enemyDie();
+								}
+							}
+							if (cur instanceof Bomber) {
+								if (Collisions.checkCollision(cur, flame) && bomb.isExploding()) {
+//									((Bomber) cur).ali;
+
+
+									//biến static -> cần sửa
+									Bomber.alive = false;
+								}
+							}
+						}
 
 						//Kiểm tra và xử lí nếu flame chạm vào brick không.
-						int xFlame = bomb.getFlameList().get(i).getX() / Sprite.SCALED_SIZE;
-						int yFlame = bomb.getFlameList().get(i).getY() / Sprite.SCALED_SIZE;
+						int xFlame = flame.getX() / Sprite.SCALED_SIZE;
+						int yFlame = flame.getY() / Sprite.SCALED_SIZE;
 						if (LayeredEntity.containsKey(generateKey(xFlame, yFlame))) {
 							Stack<Entity> tiles = LayeredEntity.get(generateKey(xFlame, yFlame));
 							if (tiles.peek() instanceof Brick) {
@@ -174,37 +201,18 @@ public class Game extends Application {
 								}
 							}
 						}
-
-						//Kiểm tra và xử lí nếu flame chạm vào người chơi hoặc quái.
-						Iterator<AnimatedEntitiy> itr = Game.entityList.iterator();
-						AnimatedEntitiy cur;
-						while (itr.hasNext()) {
-							cur = itr.next();
-							if (cur instanceof Enemy) {
-								if (Collisions.checkCollision(cur, bomb.getFlameList().get(i))) {
-									((Enemy) cur).enemyDie();
-								}
-							}
-							if (cur instanceof Bomber) {
-								if (Collisions.checkCollision(cur, bomb.getFlameList().get(i))) {
-//									((Bomber) cur).ali;
-
-
-									//biến static -> cần sửa
-									Bomber.alive = false;
-								}
-							}
-						}
-
-
 					}
 				}
-				if (bomb._destroyed && NUMBER_OF_BOMBS < 1) {
+				if (bomb.isDestroyed()){// && NUMBER_OF_BOMBS < 1) {
 					NUMBER_OF_BOMBS++;
+					bombIterator.remove();
 				}
+
 
 			}
 		}
+
+
 	}
 
 	/**
@@ -230,7 +238,7 @@ public class Game extends Application {
 				if (LayeredEntity.get(value).peek() instanceof BombItem
 						&& Collisions.checkCollisionWithBuffer(Objects.requireNonNull(getBomber()), LayeredEntity.get(value).peek())) {
 					LayeredEntity.get(value).pop();
-					NUMBER_OF_BOMBS = 2;
+					NUMBER_OF_BOMBS++;
 					BombItem.timeItem = 0;
 					BombItem.isPickUp = true;
 				}
@@ -294,19 +302,19 @@ public class Game extends Application {
 	private void bombRender() {
 		for (Bomb bomb : bombList) {
 			if (bomb != null) {
-				if (!bomb._destroyed) {
+				if (!bomb.isDestroyed()) {
 					bomb.render(gc);
 				}
-				if (!bomb._destroyed && bomb._exploding) {
+				if (!bomb.isDestroyed() && bomb.isExploding()) {
 					for (int i = 0; i < bomb.getFlameList().size(); i++) {
 						bomb.getFlameList().get(i).render(gc);
 					}
 				}
 			}
 		}
-		if (bombList.size() == 0) {
-			bombList = new ArrayList<Bomb>();
-		}
+//		if (bombList.size() == 0) {
+//			bombList = new ArrayList<Bomb>();
+//		}
 	}
 
 	/**
