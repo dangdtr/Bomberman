@@ -149,6 +149,8 @@ public class GameMap {
 		heightMap = reader.nextInt(); // 13 // x
 		widthMap = reader.nextInt();  // 31 // y
 
+		Game.WIDTH_BUFFER = widthMap - Game.WIDTH - 2;
+
 		map = new char[heightMap][widthMap];
 		reader.nextLine();
 

@@ -30,6 +30,7 @@ import uet.oop.bomberman.menu.HelpOption;
 import uet.oop.bomberman.menu.MainMenu;
 import uet.oop.bomberman.menu.PauseMenu;
 import uet.oop.bomberman.modules.Keyboard;
+import uet.oop.bomberman.views.Camera;
 
 import java.io.IOException;
 import java.util.*;
@@ -39,6 +40,8 @@ public class Game extends Application {
 
 	public static final int WIDTH = 20;
 	public static final int HEIGHT = 13;
+	public static int WIDTH_BUFFER = 0;
+
 	private GraphicsContext gc;
 	private Canvas canvas;
 
@@ -58,46 +61,40 @@ public class Game extends Application {
 	 * Ví dụ: Tại vị trí (x,y): Grass, Item, Brick.
 	 */
 	public static Map<Integer, Stack<Entity>> LayeredEntity = new HashMap<>();
-
-	private Bomber bomberman;
 	public static List<Bomb> bombList = new ArrayList<Bomb>();
 
-	MainMenu mainMenu = new MainMenu();
-	PauseMenu pauseMenu = new PauseMenu();
-	HelpOption helpOption = new HelpOption();
-	AboutOption aboutOption = new AboutOption();
+	private Bomber bomberman;
 
+	private final MainMenu mainMenu = new MainMenu();
+	private final PauseMenu pauseMenu = new PauseMenu();
+	private final HelpOption helpOption = new HelpOption();
+	private final AboutOption aboutOption = new AboutOption();
+
+	private Camera camera;
 
 	@Override
 	public void start(Stage stage) throws IOException {
-		// Tao Canvas
 		canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
 		gc = canvas.getGraphicsContext2D();
 
-		// Tao root container
 		Group root = new Group();
 		root.getChildren().add(canvas);
 
-		// Tao scene
 		Scene scene = new Scene(root);
-
 		stage.setTitle("BOMBERMAN GAME");
 
 		Scene mainMenuScene = mainMenu.create();
 		Scene pauseMenuScene = pauseMenu.create();
 		Scene helpOptionScene = helpOption.create();
 		Scene aboutOptionScene = aboutOption.create();
+
+		camera = new Camera(0, 0);
+
 		// Them scene vao stage
 		stage.setScene(mainMenuScene);
 		stage.show();
 
-
 		boolean[] running = {false};
-
-//		if (MainMenu.PLAY) {
-//			stage.setScene(scene);
-//		}
-
 
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
@@ -276,6 +273,9 @@ public class Game extends Application {
 				}
 			}
 		}
+//		if (getBomber().getX() > Game.WIDTH * Sprite.SCALED_SIZE) {
+		camera.tick(Objects.requireNonNull(getBomber()));
+//		}
 		Objects.requireNonNull(getBomber()).update();
 
 	}
@@ -307,12 +307,12 @@ public class Game extends Application {
 						while (itr.hasNext()) {
 							cur = itr.next();
 							if (cur instanceof Enemy) {
-								if (Collisions.checkCollision(cur, flame)){// && bomb.isExploding()) {
+								if (Collisions.checkCollision(cur, flame)) {// && bomb.isExploding()) {
 									((Enemy) cur).enemyDie();
 								}
 							}
 							if (cur instanceof Bomber) {
-								if (Collisions.checkCollision(cur, flame)){// && bomb.isExploding()) {
+								if (Collisions.checkCollision(cur, flame)) {// && bomb.isExploding()) {
 									((Bomber) cur).setAlive(false);
 								}
 							}
@@ -409,7 +409,7 @@ public class Game extends Application {
 		while (itr.hasNext()) {
 			AnimatedEntitiy e = itr.next();
 			if (e instanceof Enemy) {
-//				count_enemy++;
+				count_enemy++;
 			}
 		}
 
@@ -434,7 +434,6 @@ public class Game extends Application {
 	}
 
 	private void createNewGame() throws IOException {
-//		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		GameMap.setGameLevel(GameMap.getGameLevel());
 		GameMap.clear();
 		GameMap.initMap();
@@ -443,6 +442,9 @@ public class Game extends Application {
 
 	public void render() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+		gc.translate(-camera.getX(), 0);
+
 		for (Entity stillObject : stillObjects) {
 			stillObject.render(gc);
 		}
@@ -454,13 +456,14 @@ public class Game extends Application {
 		}
 		bombRender();
 
-
 		Iterator<AnimatedEntitiy> animatedEntitiyIterator = entityList.iterator();
 		while (animatedEntitiyIterator.hasNext()) {
 			AnimatedEntitiy animatedEntitiy = animatedEntitiyIterator.next();
 			if (animatedEntitiy != null)
 				animatedEntitiy.render(gc);
 		}
+
+		gc.translate(camera.getX(), 0);
 	}
 
 	/**

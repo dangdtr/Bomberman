@@ -61,6 +61,10 @@ public class Bomber extends Player {
 		VELOCITY = v;
 	}
 
+	public static int getVELOCITY() {
+		return VELOCITY;
+	}
+
 	private void calculateMove() {
 		if (isAlive()) {
 			int dx = 0;
