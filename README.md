@@ -1,22 +1,19 @@
+# Bomberman Game (clone)
+
+# Contributing
+## [```Vũ Minh Nhật```](https://www.facebook.com/) 
+## [```Đào Trọng Đăng```](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 # Installation
-
-* Add `VM options`: `Run` -> `Edit Configurations...`
-  -> `Modify options` -> `Add VM options`:
-  > --module-path /path/to/javafx-sdk-17/lib
-  > --add-modules
-  > javafx.controls
-  > --add-modules
-  > javafx.fxml
+* Using IntelliJ IDEA
+* Add `VM options`:
+  * `Run` -> `Edit Configurations...`
+    -> `Modify options` -> `Add VM options`:
+    > --module-path /path/to/javafx-sdk-17/lib
+    > --add-modules
+    > javafx.controls
+    > --add-modules
+    > javafx.fxml
 * `Run` -> `Run BombermanGame`
-
-# Bài tập lớn OOP - Bomberman Game
-
-Trong bài tập lớn này, nhiệm vụ của bạn là viết một phiên bản Java mô phỏng lại trò
-chơi [Bomberman](https://www.youtube.com/watch?v=mKIOVwqgSXM) kinh điển của NES.
-
-<img src="res/demo.png" alt="drawing" width="400"/>
-
-Bạn có thể sử dụng mã nguồn tại repository này để phát triển hoặc tự phát triển từ đầu.
 
 ## Mô tả về các đối tượng trong trò chơi
 
