@@ -30,8 +30,11 @@ import uet.oop.bomberman.menu.HelpOption;
 import uet.oop.bomberman.menu.MainMenu;
 import uet.oop.bomberman.menu.PauseMenu;
 import uet.oop.bomberman.modules.Keyboard;
+import uet.oop.bomberman.sound.Sound;
 import uet.oop.bomberman.views.Camera;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.*;
 
@@ -72,8 +75,19 @@ public class Game extends Application {
 
 	private Camera camera;
 
+	// sound
+//	private final String[] fileSounds = {"background", "put_bomb","explosion","enemy_dead", "player_dead","next_level","get_item"};
+//	private Sound sound = new Sound(fileSounds);
+//
+//
+	public static boolean isEnemyDead = false;
+	public static boolean isPlayerDead = false;
+	public static boolean isExplosion = false;
+	public static boolean isNextLv = false;
+	public static boolean isGetItem = false;
+	private Sound sound = new Sound();
 	@Override
-	public void start(Stage stage) throws IOException {
+	public void start(Stage stage) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
 		canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
 		gc = canvas.getGraphicsContext2D();
 
@@ -95,7 +109,7 @@ public class Game extends Application {
 		stage.show();
 
 		boolean[] running = {false};
-
+		sound.getBgSound();
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle(long l) {
@@ -206,7 +220,11 @@ public class Game extends Application {
 
 						if (running[0]) {
 							if (Keyboard.SPACE && NUMBER_OF_BOMBS != 0) {
-								createBomb();
+								try {
+									createBomb();
+								} catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+									e.printStackTrace();
+								}
 							}
 						}
 					}
@@ -226,9 +244,15 @@ public class Game extends Application {
 
 				if (running[0]) {
 					System.out.println("ud");
+
 					try {
+						if (isNextLv) sound.getNextLevelSound();
+						if (isEnemyDead) sound.getEnemyDeadSound();
+						if (isPlayerDead) sound.getPlayerDeadSound();
+						if (isGetItem) sound.getItemSound();
+						if (isExplosion) sound.getExplosionSound();
 						update();
-					} catch (IOException e) {
+					} catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
 						e.printStackTrace();
 					}
 					render();
@@ -236,15 +260,16 @@ public class Game extends Application {
 			}
 		};
 		timer.start();
-
-
+		//sound.getBgSound();
 		GameMap.initMap();
 	}
 
 	/**
 	 * Tạo bomb tại vị trí mới và add vào bombList.
 	 */
-	private void createBomb() {
+	private void createBomb() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+		sound = new Sound();
+		sound.getPutBomSound();
 		bomberman = getBomber();
 		int tmpX = (bomberman.getX() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
 		int tmpY = (bomberman.getY() + Sprite.SCALED_SIZE / 2) / Sprite.SCALED_SIZE;
@@ -255,11 +280,12 @@ public class Game extends Application {
 
 
 	//=================================== update area ===================================//
-	public void update() throws IOException {
+	public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
 		entitiesUpdate();
 		bombUpdate();
 		itemUpdate();
 		portalUpdate();
+
 	}
 
 	private void entitiesUpdate() throws IOException {
@@ -288,19 +314,23 @@ public class Game extends Application {
 	 * - Nổ vào người, nổ vào quái.
 	 * -
 	 */
+	int cnt_time_bombsound = 0;
+	int cnt_time_enemydead = 0;
+	int cnt_time_playerdead = 0;
 	private void bombUpdate() {
 //		System.out.println(NUMBER_OF_BOMBS);
-
 		Iterator<Bomb> bombIterator = bombList.iterator();
 		while (bombIterator.hasNext()) {
 			Bomb bomb = bombIterator.next();
 			if (bomb != null) {
 				bomb.update();
 				if (!bomb.isDestroyed() && bomb.isExploding()) {
+					cnt_time_bombsound++;
+					if (cnt_time_bombsound == 1) isExplosion = true;
+					else isExplosion = false;
 					for (int i = 0; i < bomb.getFlameList().size(); i++) {
 						Flame flame = bomb.getFlameList().get(i);
 						flame.update();
-
 						//Kiểm tra và xử lí nếu flame chạm vào người chơi hoặc quái.
 						Iterator<AnimatedEntitiy> itr = Game.entityList.iterator();
 						AnimatedEntitiy cur;
@@ -309,11 +339,17 @@ public class Game extends Application {
 							if (cur instanceof Enemy) {
 								if (Collisions.checkCollision(cur, flame)) {// && bomb.isExploding()) {
 									((Enemy) cur).enemyDie();
+									cnt_time_enemydead++;
+									if (cnt_time_enemydead == 1) isEnemyDead = true;
+									else isEnemyDead = false;
 								}
 							}
 							if (cur instanceof Bomber) {
 								if (Collisions.checkCollision(cur, flame)) {// && bomb.isExploding()) {
 									((Bomber) cur).setAlive(false);
+									cnt_time_playerdead++;
+									if (cnt_time_playerdead == 1) isPlayerDead = true;
+									else isPlayerDead = false;
 								}
 							}
 						}
@@ -337,18 +373,20 @@ public class Game extends Application {
 				if (bomb.isDestroyed()) {// && NUMBER_OF_BOMBS < 1) {
 					NUMBER_OF_BOMBS++;
 					bombIterator.remove();
+					cnt_time_bombsound = 0;
+					cnt_time_enemydead = 0;
+					cnt_time_playerdead = 0;
 				}
-
-
 			}
 		}
-
-
 	}
 
 	/**
 	 * Cập nhật item khi có va chạm với người chơi.
 	 */
+	int cnt_time_itemsound1 = 0;
+	int cnt_time_itemsound2 = 0;
+	int cnt_time_itemsound3 = 0;
 	private void itemUpdate() {
 		if (!LayeredEntity.isEmpty()) {
 			for (Integer value : getLayeredEntitySet()) {
@@ -375,15 +413,22 @@ public class Game extends Application {
 				}
 			}
 			if (FlameItem.isPickUp) {
+				cnt_time_itemsound1 ++;
 				FlameItem.timeItem++;
+				if (cnt_time_itemsound1 == 1) isGetItem = true;
+				else isGetItem = false;
 				if (FlameItem.timeItem > 2000) {
 					FlameItem.timeItem = 0;
 					Game.LENGTH_OF_FLAME = 1;
-
 					FlameItem.isPickUp = false;
 				}
 			}
 			if (SpeedItem.isPickUp) {
+				cnt_time_itemsound2++;
+				if (cnt_time_itemsound2 == 1) {
+					isGetItem = true;
+				}
+				else isGetItem = false;
 				SpeedItem.timeItem++;
 				if (SpeedItem.timeItem > 2000) {
 					SpeedItem.timeItem = 0;
@@ -392,6 +437,9 @@ public class Game extends Application {
 				}
 			}
 			if (BombItem.isPickUp) {
+				cnt_time_itemsound3++;
+				if (cnt_time_itemsound3 == 1) isGetItem = true;
+				else isGetItem = false;
 				BombItem.timeItem++;
 				if (BombItem.timeItem > 2000) {
 					BombItem.timeItem = 0;
@@ -399,10 +447,11 @@ public class Game extends Application {
 					BombItem.isPickUp = false;
 				}
 			}
-
 		}
+
 	}
 
+	int cnt_time_nextlv = 0;
 	private void portalUpdate() throws IOException {
 		int count_enemy = 0;
 		Iterator<AnimatedEntitiy> itr = entityList.iterator();
@@ -426,9 +475,13 @@ public class Game extends Application {
 				}
 			}
 			if (canNextGame) {
+				cnt_time_nextlv++;
+				if (cnt_time_nextlv == 1) isNextLv = true;
+				else isNextLv = false;
 				GameMap.setGameLevel(GameMap.getGameLevel() + 1);
 				GameMap.clear();
 				GameMap.initMap();
+				cnt_time_nextlv = 0;
 			}
 		}
 	}
@@ -444,6 +497,7 @@ public class Game extends Application {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
 		gc.translate(-camera.getX(), 0);
+
 
 		for (Entity stillObject : stillObjects) {
 			stillObject.render(gc);
@@ -462,7 +516,6 @@ public class Game extends Application {
 			if (animatedEntitiy != null)
 				animatedEntitiy.render(gc);
 		}
-
 		gc.translate(camera.getX(), 0);
 	}
 

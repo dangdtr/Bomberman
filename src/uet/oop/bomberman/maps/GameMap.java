@@ -59,6 +59,11 @@ public class GameMap {
 		Game.LayeredEntity = new HashMap<>();
 		Game.bombList = new ArrayList<>();
 		Game.NUMBER_OF_BOMBS = 1;
+		Game.isNextLv = false;
+		Game.isPlayerDead = false;
+		Game.isGetItem = false;
+		Game.isExplosion = false;
+		Game.isEnemyDead =false;
 		map = new char[getHeightMap()][getWidthMap()];
 		createMap(getGameLevel());
 	}

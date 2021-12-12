@@ -41,58 +41,8 @@ public class Bomb extends AbstractBomb {
 		sprite = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, _animate, 200);
 	}
 
-	public boolean collideBom() {
-		Enemy enemy = Game.getEnemy();
-		if (enemy == null) return false;
-		return Collisions.checkCollision(this, enemy);
-	}
-
-	public void killBomber() {
-		if (!Game.bombList.isEmpty()) {
-			for (Bomb bomb : Game.bombList) {
-				if (bomb != null) {
-					if (!bomb._destroyed && bomb._exploding) {
-						for (int i = 0; i < bomb.getFlameList().size(); i++) {
-							if (Collisions.checkCollision(bomb.getFlameList().get(i), Objects.requireNonNull(Game.getBomber()))) {
-								Game.getBomber().setAlive(false);
-								break;
-							}
-						}
-					}
-					if (bomb._destroyed && Game.NUMBER_OF_BOMBS < 1) {
-						Game.NUMBER_OF_BOMBS++;
-					}
-				}
-			}
-		}
-	}
-
-	public void killEnemy() {
-		Enemy enemy = Game.getEnemy();
-		if (enemy == null) return;
-		if (!Game.bombList.isEmpty()) {
-			for (Bomb bomb : Game.bombList) {
-				if (bomb != null) {
-					if (!bomb._destroyed && bomb._exploding) {
-						for (int i = 0; i < bomb.getFlameList().size(); i++) {
-							if (Collisions.checkCollision(bomb.getFlameList().get(i), enemy)) {
-								enemy.enemyDie();
-								break;
-							}
-						}
-					}
-					if (bomb._destroyed && Game.NUMBER_OF_BOMBS < 1) {
-						Game.NUMBER_OF_BOMBS++;
-					}
-				}
-			}
-		}
-	}
-
 	@Override
 	public void update() {
-//		killBomber();
-//		killEnemy();
 		handleBomb();
 		chooseSprite();
 		animate();
@@ -108,11 +58,9 @@ public class Bomb extends AbstractBomb {
 			} else {
 				if (_timeToExplode < Game.TIME_TO_EXPLOSION_BOMB + Game.TIME_TO_DISAPPEAR) {
 					_exploding = true;
-
 				} else if (_timeToExplode > Game.TIME_TO_EXPLOSION_BOMB + Game.TIME_TO_DISAPPEAR) {
 					_timeToExplode = 0;
 					_destroyed = true;
-
 				}
 			}
 		}
