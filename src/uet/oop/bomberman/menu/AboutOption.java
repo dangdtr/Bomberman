@@ -15,6 +15,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import uet.oop.bomberman.graphics.Sprite;
 
 import static uet.oop.bomberman.Game.HEIGHT;
@@ -24,44 +25,36 @@ public class AboutOption extends Menu{
 
 	public static boolean ABOUT_BACK = false;
 
+	public AboutOption() {
+		create();
+	}
+
 	@Override
 	public Scene create() {
 
-		VBox vb = new VBox();
-		vb.setAlignment(Pos.BOTTOM_CENTER);
-		vb.setPadding(new Insets(20));
-		vb.setSpacing(30);
-		vb.setBackground(new Background(createImage("file:res/BG.png")));
-
+		VBox vb = initVBox();
 
 		Text backText = new Text("Back");
 
-		DropShadow ds = new DropShadow();
-		ds.setOffsetY(3.0f);
-		ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
+		String str =  " Bomberman Game\n"
+				+ "  OOP project\n"
+				+ " Contributions\n"
+				+ " -Vu Minh Nhat\n"
+				+ " -Dao Trong Dang\n";
+		TextFlow area = new TextFlow();
 
+		Text info = new Text(str);
 
-		Font font = Font.loadFont("file:res/emulogic.ttf", 45);
+		customText(backText);
+		customText(info);
+		info.setStyle("-fx-font-size:25");
+		info.setEffect(null);
 
-		backText.setEffect(ds);
-		backText.setFont(font);
-
-
-
-		backText.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		backText.setStroke(Color.BLUEVIOLET);
-		backText.setStrokeWidth(0.5);
-
-		DropShadow shadow = new DropShadow();
-		shadow.setOffsetY(5.0);
-		Reflection r = new Reflection();
-		r.setFraction(0.6f);
-		backText.setEffect(r);
-
+		area.getChildren().add(info);
+		vb.getChildren().add(area);
 		vb.getChildren().add(backText);
+		VBox.setMargin(area, new Insets(10, 200, 50, 250));
+		vb.setFillWidth(true);
 
 		Scene aboutOptionScene = new Scene(vb, Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
 

@@ -28,39 +28,11 @@ public class HelpOption extends Menu{
 
 	@Override
 	public Scene create(){
-		VBox vb = new VBox();
-		vb.setAlignment(Pos.BOTTOM_CENTER);
-		vb.setPadding(new Insets(20));
-		vb.setSpacing(30);
-		vb.setBackground(new Background(createImage("file:res/BG.png")));
-
+		VBox vb = initVBox();
 
 		Text backText = new Text("Back");
 
-		DropShadow ds = new DropShadow();
-		ds.setOffsetY(3.0f);
-		ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
-
-
-		Font font = Font.loadFont("file:res/emulogic.ttf", 45);
-
-		backText.setEffect(ds);
-		backText.setFont(font);
-
-
-
-		backText.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		backText.setStroke(Color.BLUEVIOLET);
-		backText.setStrokeWidth(0.5);
-
-		DropShadow shadow = new DropShadow();
-		shadow.setOffsetY(5.0);
-		Reflection r = new Reflection();
-		r.setFraction(0.6f);
-		backText.setEffect(r);
+		customText(backText);
 
 		vb.getChildren().add(backText);
 

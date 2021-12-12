@@ -34,71 +34,18 @@ public class PauseMenu extends Menu {
 
 	@Override
 	public Scene create(){
-		VBox vb = new VBox();
-		vb.setAlignment(Pos.BOTTOM_CENTER);
-		vb.setPadding(new Insets(20));
-		vb.setSpacing(30);
-		vb.setBackground(new Background(createImage("file:res/BG.png")));
-
+		VBox vb = initVBox();
 
 		Text continueText = new Text("Continue");
 		Text helpText = new Text("Help");
 		Text restartText = new Text("Restart");
 		Text mainMenu = new Text("Main Menu");
 
-		DropShadow ds = new DropShadow();
-		ds.setOffsetY(3.0f);
-		ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
+		customText(continueText);
+		customText(helpText);
+		customText(restartText);
+		customText(mainMenu);
 
-
-		Font font = Font.loadFont("file:res/emulogic.ttf", 45);
-
-		continueText.setEffect(ds);
-		continueText.setFont(font);
-		helpText.setEffect(ds);
-		helpText.setFont(font);
-		restartText.setEffect(ds);
-		restartText.setFont(font);
-		mainMenu.setEffect(ds);
-		mainMenu.setFont(font);
-
-		continueText.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		continueText.setStroke(Color.BLUEVIOLET);
-		continueText.setStrokeWidth(0.5);
-
-		helpText.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		helpText.setStroke(Color.BLUEVIOLET);
-		helpText.setStrokeWidth(0.5);
-
-		restartText.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		restartText.setStroke(Color.BLUEVIOLET);
-		restartText.setStrokeWidth(0.5);
-
-		mainMenu.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		mainMenu.setStroke(Color.BLUEVIOLET);
-		mainMenu.setStrokeWidth(0.5);
-
-
-		DropShadow shadow = new DropShadow();
-		shadow.setOffsetY(5.0);
-		Reflection r = new Reflection();
-		r.setFraction(0.7f);
-		continueText.setEffect(r);
-		helpText.setEffect(r);
-		restartText.setEffect(r);
-		mainMenu.setEffect(r);
 
 		vb.getChildren().add(continueText);
 		vb.getChildren().add(restartText);

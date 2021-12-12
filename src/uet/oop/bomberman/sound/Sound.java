@@ -20,7 +20,7 @@ public class Sound {
     public Sound() {
         listFile = new HashMap<>();
         for (String file : files) {
-            listFile.put(file, ".\\res\\sound\\" + file + ".wav");
+            listFile.put(file, "res/sound/" + file + ".wav");
         }
     }
     /**

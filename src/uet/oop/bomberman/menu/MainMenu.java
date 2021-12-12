@@ -28,66 +28,25 @@ public class MainMenu extends Menu {
 	public static boolean PLAY = false;
 	public static boolean HELP = false;
 	public static boolean ABOUT = false;
+	public static boolean SCORE = false;
 
 	@Override
 
 	public Scene create(){
-		VBox vb = new VBox();
-		vb.setAlignment(Pos.BOTTOM_CENTER);
-		vb.setPadding(new Insets(20));
-		vb.setSpacing(30);
-		vb.setBackground(new Background(createImage("file:res/BG.png")));
-
+		VBox vb = initVBox();
 
 		Text playText = new Text("Play");
 		Text helpText = new Text("Help");
 		Text aboutText = new Text("About");
+		Text scoreText = new Text("High Score");
 
-		DropShadow ds = new DropShadow();
-		ds.setOffsetY(3.0f);
-		ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
-
-
-		Font font = Font.loadFont("file:res/emulogic.ttf", 45);
-
-		playText.setEffect(ds);
-		playText.setFont(font);
-		helpText.setEffect(ds);
-		helpText.setFont(font);
-		aboutText.setEffect(ds);
-		aboutText.setFont(font);
-
-
-		playText.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		playText.setStroke(Color.BLUEVIOLET);
-		playText.setStrokeWidth(0.5);
-
-		helpText.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		helpText.setStroke(Color.BLUEVIOLET);
-		helpText.setStrokeWidth(0.5);
-
-		aboutText.setFill(new LinearGradient(0, 0, 1, 1, true,
-				CycleMethod.REFLECT,
-				new Stop(0.0, Color.RED),
-				new Stop(1.0, Color.GOLD)));
-		aboutText.setStroke(Color.BLUEVIOLET);
-		aboutText.setStrokeWidth(0.5);
-
-		DropShadow shadow = new DropShadow();
-		shadow.setOffsetY(5.0);
-		Reflection r = new Reflection();
-		r.setFraction(0.6f);
-		playText.setEffect(r);
-		helpText.setEffect(r);
-		aboutText.setEffect(r);
+		customText(playText);
+		customText(helpText);
+		customText(aboutText);
+		customText(scoreText);
 
 		vb.getChildren().add(playText);
+		vb.getChildren().add(scoreText);
 		vb.getChildren().add(helpText);
 		vb.getChildren().add(aboutText);
 
@@ -117,6 +76,14 @@ public class MainMenu extends Menu {
 			}
 		};
 
+		EventHandler<MouseEvent> scoreHandle = new EventHandler<MouseEvent>()
+		{
+			public void handle(MouseEvent event)
+			{
+				scoreHandle(event, scoreText);
+			}
+		};
+
 		playText.addEventFilter(MouseEvent.MOUSE_ENTERED, playHandle);
 		playText.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET, playHandle);
 		playText.addEventFilter(MouseEvent.MOUSE_PRESSED, playHandle);
@@ -129,9 +96,26 @@ public class MainMenu extends Menu {
 		aboutText.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET, aboutHandle);
 		aboutText.addEventFilter(MouseEvent.MOUSE_PRESSED, aboutHandle);
 
+		scoreText.addEventFilter(MouseEvent.MOUSE_ENTERED, scoreHandle);
+		scoreText.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET, scoreHandle);
+		scoreText.addEventFilter(MouseEvent.MOUSE_PRESSED, scoreHandle);
+
 		return menuScene;
 	}
 
+	private void scoreHandle(MouseEvent event, Text text) {
+		if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
+			text.setStyle("-fx-font-size:60");
+		}else if (event.getEventType() == MouseEvent.MOUSE_EXITED){
+			text.setStyle("-fx-font-size:45");
+		}else if (event.getEventType() == MouseEvent.MOUSE_PRESSED){
+//			System.out.println("chon");
+			SCORE = true;
+			text.setStyle("-fx-font-size:45");
+		}else {
+			text.setStyle("-fx-font-size:45");
+		}
+	}
 
 
 	private static void aboutHandle(MouseEvent event, Text text) {

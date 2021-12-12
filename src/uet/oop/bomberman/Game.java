@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import uet.oop.bomberman.collisions.Collisions;
 import uet.oop.bomberman.entities.AnimatedEntitiy;
@@ -24,11 +25,10 @@ import uet.oop.bomberman.entities.tile.item.FlameItem;
 import uet.oop.bomberman.entities.tile.item.Item;
 import uet.oop.bomberman.entities.tile.item.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.info.InfoBar;
+import uet.oop.bomberman.info.Score;
 import uet.oop.bomberman.maps.GameMap;
-import uet.oop.bomberman.menu.AboutOption;
-import uet.oop.bomberman.menu.HelpOption;
-import uet.oop.bomberman.menu.MainMenu;
-import uet.oop.bomberman.menu.PauseMenu;
+import uet.oop.bomberman.menu.*;
 import uet.oop.bomberman.modules.Keyboard;
 import uet.oop.bomberman.sound.Sound;
 import uet.oop.bomberman.views.Camera;
@@ -67,11 +67,16 @@ public class Game extends Application {
 	public static List<Bomb> bombList = new ArrayList<Bomb>();
 
 	private Bomber bomberman;
+	private TextFlow textFlow = new TextFlow();
+	private Score score = new Score();
+	private InfoBar infoBar = new InfoBar();
 
 	private final MainMenu mainMenu = new MainMenu();
 	private final PauseMenu pauseMenu = new PauseMenu();
 	private final HelpOption helpOption = new HelpOption();
 	private final AboutOption aboutOption = new AboutOption();
+	private final ScoreOption scoreOption = new ScoreOption(score);
+
 
 	private Camera camera;
 
@@ -86,6 +91,10 @@ public class Game extends Application {
 	public static boolean isNextLv = false;
 	public static boolean isGetItem = false;
 	private Sound sound = new Sound();
+
+	public Game() throws IOException {
+	}
+
 	@Override
 	public void start(Stage stage) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
 		canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
@@ -101,7 +110,9 @@ public class Game extends Application {
 		Scene pauseMenuScene = pauseMenu.create();
 		Scene helpOptionScene = helpOption.create();
 		Scene aboutOptionScene = aboutOption.create();
+		Scene scoreOptionScene = scoreOption.create();
 
+		infoBar.createShowScore(root,textFlow);
 		camera = new Camera(0, 0);
 
 		// Them scene vao stage
@@ -128,7 +139,11 @@ public class Game extends Application {
 							stage.setScene(aboutOptionScene);
 							MainMenu.ABOUT = false;
 						}
-
+						if (MainMenu.SCORE) {
+							scoreOption.updateScore();
+							stage.setScene(scoreOptionScene);
+							MainMenu.SCORE = false;
+						}
 					}
 				});
 
@@ -154,6 +169,17 @@ public class Game extends Application {
 							stage.setScene(mainMenuScene);
 							AboutOption.ABOUT_BACK = false;
 							MainMenu.ABOUT = false;
+						}
+					}
+				});
+
+				scoreOptionScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent mouseEvent) {
+						if (ScoreOption.SCORE_BACK) {
+							stage.setScene(mainMenuScene);
+							ScoreOption.SCORE_BACK = false;
+							MainMenu.SCORE = false;
 						}
 					}
 				});
@@ -296,12 +322,18 @@ public class Game extends Application {
 				animatedEntitiy.update();
 				if (((Enemy) animatedEntitiy).isDestroyed()) {
 					iterator.remove();
+					score.killEnemy();
+					infoBar.updateScore(score);
 				}
 			}
 		}
 //		if (getBomber().getX() > Game.WIDTH * Sprite.SCALED_SIZE) {
 		camera.tick(Objects.requireNonNull(getBomber()));
 //		}
+		if (!getBomber().isAlive()) {
+			score.endGame();
+			infoBar.updateScore(score);
+		}
 		Objects.requireNonNull(getBomber()).update();
 
 	}
@@ -475,13 +507,11 @@ public class Game extends Application {
 				}
 			}
 			if (canNextGame) {
-				cnt_time_nextlv++;
-				if (cnt_time_nextlv == 1) isNextLv = true;
-				else isNextLv = false;
 				GameMap.setGameLevel(GameMap.getGameLevel() + 1);
 				GameMap.clear();
 				GameMap.initMap();
-				cnt_time_nextlv = 0;
+				score.endGame();
+				infoBar.updateScore(score);
 			}
 		}
 	}
@@ -490,6 +520,8 @@ public class Game extends Application {
 		GameMap.setGameLevel(GameMap.getGameLevel());
 		GameMap.clear();
 		GameMap.initMap();
+		score.endGame();
+		infoBar.updateScore(score);
 	}
 	//=================================== Render area ===================================//
 
