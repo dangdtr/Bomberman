@@ -4,7 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.collisions.Collisions;
-import uet.oop.bomberman.entities.character.bomber.Bomber;
 import uet.oop.bomberman.entities.character.enemy.mode.AI2;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -42,7 +41,7 @@ public class Oneal extends Enemy {
 	public void calculateMove() {
 		direction = ai.calcDirection();
 
-		if (!this.isDie()){
+		if (!this.isDie()) {
 			if (direction == 0) {
 				if (upable(x, y)) {
 					y -= speed;

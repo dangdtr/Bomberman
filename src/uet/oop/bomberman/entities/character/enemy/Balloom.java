@@ -4,7 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.collisions.Collisions;
-import uet.oop.bomberman.entities.character.bomber.Bomber;
 import uet.oop.bomberman.entities.character.enemy.mode.RandomMode;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -29,7 +28,7 @@ public class Balloom extends Enemy {
 
 
 	private void calculateMove() {
-		if (!this.isDie()){
+		if (!this.isDie()) {
 			count++;
 			if (count < 150 && count >= 0) {
 				if (rightable(x, y)) {// && rightableBrick(x, y)) {

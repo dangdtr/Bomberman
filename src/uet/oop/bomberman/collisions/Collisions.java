@@ -17,9 +17,9 @@ public class Collisions {
 		bottomB = topB + Sprite.SCALED_SIZE;
 
 		leftA = A.getX() + 1;
-		rightA = A.getX() + Sprite.SCALED_SIZE -1 ;
-		topA = A.getY() +1;
-		bottomA = A.getY() + Sprite.SCALED_SIZE - 1 ;
+		rightA = A.getX() + Sprite.SCALED_SIZE - 1;
+		topA = A.getY() + 1;
+		bottomA = A.getY() + Sprite.SCALED_SIZE - 1;
 
 		return !((bottomA <= topB) || (topA >= bottomB) || (rightA <= leftB) || (leftA >= rightB));
 	}

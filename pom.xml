@@ -27,7 +27,24 @@
             <artifactId>javafx-graphics</artifactId>
             <version>15</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.philfrei</groupId>-->
+<!--            <artifactId>AudioCue</artifactId>-->
+<!--            <version>Tag</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>javax.media</groupId>
+            <artifactId>jmf</artifactId>
+            <version>2.1.1e</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <build>
         <directory>target</directory>

@@ -18,7 +18,8 @@ public class Camera {
 	public void tick(Entity entity) {
 		x += ((entity.getX() - x) - Game.WIDTH * Sprite.SCALED_SIZE / 2) * 0.5f;
 		if (x <= 0) x = 0;
-		if (x >= (Game.WIDTH- Game.WIDTH_BUFFER) * Sprite.SCALED_SIZE) x =  (Game.WIDTH-Game.WIDTH_BUFFER) * Sprite.SCALED_SIZE;
+		if (x >= (Game.WIDTH - Game.WIDTH_BUFFER) * Sprite.SCALED_SIZE)
+			x = (Game.WIDTH - Game.WIDTH_BUFFER) * Sprite.SCALED_SIZE;
 
 		//Trong game này thì toạ độ camera y không cần thiết
 //		y += ((entity.getY() - y) - Game.HEIGHT * Sprite.SCALED_SIZE / 2) * 0.5f;

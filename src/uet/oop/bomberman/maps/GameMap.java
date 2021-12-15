@@ -63,10 +63,11 @@ public class GameMap {
 		Game.isPlayerDead = false;
 		Game.isGetItem = false;
 		Game.isExplosion = false;
-		Game.isEnemyDead =false;
+		Game.isEnemyDead = false;
 		map = new char[getHeightMap()][getWidthMap()];
 		createMap(getGameLevel());
 	}
+
 	public static void clear() throws IOException {
 		Game.entityList.clear();
 		Game.stillObjects.clear();
@@ -150,7 +151,7 @@ public class GameMap {
 		FileReader filePath = new FileReader(path);
 		Scanner reader = new Scanner(filePath);
 
-		int level = reader.nextInt();
+		reader.nextInt();
 		heightMap = reader.nextInt(); // 13 // x
 		widthMap = reader.nextInt();  // 31 // y
 

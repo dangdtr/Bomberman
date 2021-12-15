@@ -5,7 +5,6 @@ import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.AnimatedEntitiy;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.tile.Grass;
-import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Character extends AnimatedEntitiy {

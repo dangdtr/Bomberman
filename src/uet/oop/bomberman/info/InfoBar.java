@@ -12,6 +12,7 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class InfoBar {
 	Text scoreShow;
+
 	public InfoBar() {
 		scoreShow = new Text("0");
 	}
@@ -25,8 +26,8 @@ public class InfoBar {
 		scoreShow.setStroke(Color.BLUEVIOLET);
 		scoreShow.setStrokeWidth(0.5);
 		Font font = Font.loadFont("file:res/emulogic.ttf", 45);
-		scoreShow.setTranslateX(Sprite.SCALED_SIZE/4);
-		scoreShow.setTranslateY(Sprite.SCALED_SIZE/4);
+		scoreShow.setTranslateX(Sprite.SCALED_SIZE / 4);
+		scoreShow.setTranslateY(Sprite.SCALED_SIZE / 4);
 
 		textFlow.getChildren().add(scoreShow);
 

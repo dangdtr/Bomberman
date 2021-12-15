@@ -99,7 +99,7 @@ public class Bomber extends Player {
 
 
 	private void chooseSprite() {
-		if (isAlive()){
+		if (isAlive()) {
 			if (Keyboard.UP) {
 				sprite = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, _animate, _time);
 				prevSprite = Sprite.player_up;
@@ -119,7 +119,7 @@ public class Bomber extends Player {
 			if (!Keyboard.UP && !Keyboard.LEFT && !Keyboard.DOWN && !Keyboard.RIGHT) {
 				sprite = prevSprite;
 			}
-		}else {
+		} else {
 			sprite = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, _animate, Game.TIME_TO_DISAPPEAR);
 		}
 	}

@@ -2,14 +2,10 @@ package uet.oop.bomberman.entities.bomb;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Game;
-import uet.oop.bomberman.collisions.Collisions;
-import uet.oop.bomberman.entities.character.bomber.Bomber;
-import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class Bomb extends AbstractBomb {

@@ -31,6 +31,7 @@ public abstract class Menu {
 				new BackgroundSize(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT, true, true, false, true));
 
 	}
+
 	protected void customText(Text text) {
 		DropShadow ds = new DropShadow();
 		ds.setOffsetY(3.0f);

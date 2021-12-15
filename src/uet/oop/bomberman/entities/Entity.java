@@ -32,6 +32,7 @@ public abstract class Entity {
 	public void render(GraphicsContext gc) {
 		gc.drawImage(img, x, y);
 	}
+
 	public abstract void update() throws IOException;
 
 

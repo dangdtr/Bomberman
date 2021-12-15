@@ -41,7 +41,6 @@ public abstract class Enemy extends Character {
 
 		for (Bomb bomb : Game.getBombList()) {
 			if (bomb.getX() == x && bomb.getY() == y) {
-				System.out.println("detech bomb");
 
 				entity = bomb;
 			}

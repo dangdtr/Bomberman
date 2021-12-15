@@ -23,6 +23,7 @@ public class ScoreOption extends Menu {
 	private Text backText;
 	private Text scoreInfo;
 	private TextFlow area;
+
 	public ScoreOption(Score score) throws IOException {
 		this.score = score;
 		create();
@@ -39,10 +40,10 @@ public class ScoreOption extends Menu {
 
 	@Override
 	public Scene create() {
-		 vb = initVBox();
-		 backText = new Text("Back");
-		 area = new TextFlow();
-		 scoreInfo = new Text(str);
+		vb = initVBox();
+		backText = new Text("Back");
+		area = new TextFlow();
+		scoreInfo = new Text(str);
 
 		customText(backText);
 		customText(scoreInfo);
@@ -78,7 +79,6 @@ public class ScoreOption extends Menu {
 		} else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET) {
 			text.setStyle("-fx-font-size:45");
 		} else if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-			System.out.println("chon");
 			SCORE_BACK = true;
 			text.setStyle("-fx-font-size:45");
 		} else {

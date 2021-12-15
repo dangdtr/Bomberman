@@ -67,9 +67,9 @@ public class Game extends Application {
 	public static List<Bomb> bombList = new ArrayList<Bomb>();
 
 	private Bomber bomberman;
-	private TextFlow textFlow = new TextFlow();
-	private Score score = new Score();
-	private InfoBar infoBar = new InfoBar();
+	private final TextFlow textFlow = new TextFlow();
+	private final Score score = new Score();
+	private final InfoBar infoBar = new InfoBar();
 
 	private final MainMenu mainMenu = new MainMenu();
 	private final PauseMenu pauseMenu = new PauseMenu();
@@ -112,7 +112,7 @@ public class Game extends Application {
 		Scene aboutOptionScene = aboutOption.create();
 		Scene scoreOptionScene = scoreOption.create();
 
-		infoBar.createShowScore(root,textFlow);
+		infoBar.createShowScore(root, textFlow);
 		camera = new Camera(0, 0);
 
 		// Them scene vao stage
@@ -269,7 +269,6 @@ public class Game extends Application {
 				});
 
 				if (running[0]) {
-					System.out.println("ud");
 
 					try {
 						if (isNextLv) sound.getNextLevelSound();
@@ -349,6 +348,7 @@ public class Game extends Application {
 	int cnt_time_bombsound = 0;
 	int cnt_time_enemydead = 0;
 	int cnt_time_playerdead = 0;
+
 	private void bombUpdate() {
 //		System.out.println(NUMBER_OF_BOMBS);
 		Iterator<Bomb> bombIterator = bombList.iterator();
@@ -358,8 +358,7 @@ public class Game extends Application {
 				bomb.update();
 				if (!bomb.isDestroyed() && bomb.isExploding()) {
 					cnt_time_bombsound++;
-					if (cnt_time_bombsound == 1) isExplosion = true;
-					else isExplosion = false;
+					isExplosion = cnt_time_bombsound == 1;
 					for (int i = 0; i < bomb.getFlameList().size(); i++) {
 						Flame flame = bomb.getFlameList().get(i);
 						flame.update();
@@ -372,16 +371,14 @@ public class Game extends Application {
 								if (Collisions.checkCollision(cur, flame)) {// && bomb.isExploding()) {
 									((Enemy) cur).enemyDie();
 									cnt_time_enemydead++;
-									if (cnt_time_enemydead == 1) isEnemyDead = true;
-									else isEnemyDead = false;
+									isEnemyDead = cnt_time_enemydead == 1;
 								}
 							}
 							if (cur instanceof Bomber) {
 								if (Collisions.checkCollision(cur, flame)) {// && bomb.isExploding()) {
 									((Bomber) cur).setAlive(false);
 									cnt_time_playerdead++;
-									if (cnt_time_playerdead == 1) isPlayerDead = true;
-									else isPlayerDead = false;
+									isPlayerDead = cnt_time_playerdead == 1;
 								}
 							}
 						}
@@ -419,6 +416,7 @@ public class Game extends Application {
 	int cnt_time_itemsound1 = 0;
 	int cnt_time_itemsound2 = 0;
 	int cnt_time_itemsound3 = 0;
+
 	private void itemUpdate() {
 		if (!LayeredEntity.isEmpty()) {
 			for (Integer value : getLayeredEntitySet()) {
@@ -445,10 +443,9 @@ public class Game extends Application {
 				}
 			}
 			if (FlameItem.isPickUp) {
-				cnt_time_itemsound1 ++;
+				cnt_time_itemsound1++;
 				FlameItem.timeItem++;
-				if (cnt_time_itemsound1 == 1) isGetItem = true;
-				else isGetItem = false;
+				isGetItem = cnt_time_itemsound1 == 1;
 				if (FlameItem.timeItem > 2000) {
 					FlameItem.timeItem = 0;
 					Game.LENGTH_OF_FLAME = 1;
@@ -457,10 +454,7 @@ public class Game extends Application {
 			}
 			if (SpeedItem.isPickUp) {
 				cnt_time_itemsound2++;
-				if (cnt_time_itemsound2 == 1) {
-					isGetItem = true;
-				}
-				else isGetItem = false;
+				isGetItem = cnt_time_itemsound2 == 1;
 				SpeedItem.timeItem++;
 				if (SpeedItem.timeItem > 2000) {
 					SpeedItem.timeItem = 0;
@@ -470,8 +464,7 @@ public class Game extends Application {
 			}
 			if (BombItem.isPickUp) {
 				cnt_time_itemsound3++;
-				if (cnt_time_itemsound3 == 1) isGetItem = true;
-				else isGetItem = false;
+				isGetItem = cnt_time_itemsound3 == 1;
 				BombItem.timeItem++;
 				if (BombItem.timeItem > 2000) {
 					BombItem.timeItem = 0;
@@ -484,6 +477,7 @@ public class Game extends Application {
 	}
 
 	int cnt_time_nextlv = 0;
+
 	private void portalUpdate() throws IOException {
 		int count_enemy = 0;
 		Iterator<AnimatedEntitiy> itr = entityList.iterator();

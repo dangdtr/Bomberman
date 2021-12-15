@@ -1,20 +1,9 @@
 package uet.oop.bomberman.menu;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Reflection;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.text.Font;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -33,7 +22,7 @@ public class PauseMenu extends Menu {
 	}
 
 	@Override
-	public Scene create(){
+	public Scene create() {
 		VBox vb = initVBox();
 
 		Text continueText = new Text("Continue");
@@ -55,34 +44,26 @@ public class PauseMenu extends Menu {
 
 		Scene pauseMenuScene = new Scene(vb, Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
 
-		EventHandler<MouseEvent> continueHandle = new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
+		EventHandler<MouseEvent> continueHandle = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
 				continueHandle(event, continueText);
 			}
 		};
 
-		EventHandler<MouseEvent> helpHandle = new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
+		EventHandler<MouseEvent> helpHandle = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
 				helpHandle(event, helpText);
 			}
 		};
 
-		EventHandler<MouseEvent> restartHandle = new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
+		EventHandler<MouseEvent> restartHandle = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
 				restartHandle(event, restartText);
 			}
 		};
 
-		EventHandler<MouseEvent> mainMenuHanlde = new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
+		EventHandler<MouseEvent> mainMenuHanlde = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
 				mainMenuHanlde(event, mainMenu);
 			}
 		};
@@ -109,13 +90,13 @@ public class PauseMenu extends Menu {
 	private static void mainMenuHanlde(MouseEvent event, Text text) {
 		if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
 			text.setStyle("-fx-font-size:60");
-		}else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET){
+		} else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET) {
 			text.setStyle("-fx-font-size:45");
-		}else if (event.getEventType() == MouseEvent.MOUSE_PRESSED){
+		} else if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 //			System.out.println("chon");
 			MAIN_MAIN = true;
 			text.setStyle("-fx-font-size:45");
-		}else {
+		} else {
 			text.setStyle("-fx-font-size:45");
 		}
 	}
@@ -124,13 +105,13 @@ public class PauseMenu extends Menu {
 	private static void restartHandle(MouseEvent event, Text text) {
 		if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
 			text.setStyle("-fx-font-size:60");
-		}else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET){
+		} else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET) {
 			text.setStyle("-fx-font-size:45");
-		}else if (event.getEventType() == MouseEvent.MOUSE_PRESSED){
+		} else if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 			RESTART = true;
 //			System.out.println("chon");
 			text.setStyle("-fx-font-size:45");
-		}else {
+		} else {
 			text.setStyle("-fx-font-size:45");
 		}
 	}
@@ -138,13 +119,13 @@ public class PauseMenu extends Menu {
 	private static void helpHandle(MouseEvent event, Text text) {
 		if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
 			text.setStyle("-fx-font-size:60");
-		}else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET){
+		} else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET) {
 			text.setStyle("-fx-font-size:45");
-		}else if (event.getEventType() == MouseEvent.MOUSE_PRESSED){
+		} else if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 //			System.out.println("chon");
 			HELP = true;
 			text.setStyle("-fx-font-size:45");
-		}else {
+		} else {
 			text.setStyle("-fx-font-size:45");
 		}
 	}
@@ -152,13 +133,13 @@ public class PauseMenu extends Menu {
 	private static void continueHandle(MouseEvent event, Text text) {
 		if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
 			text.setStyle("-fx-font-size:60");
-		}else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET){
+		} else if (event.getEventType() == MouseEvent.MOUSE_EXITED_TARGET) {
 			text.setStyle("-fx-font-size:45");
-		}else if (event.getEventType() == MouseEvent.MOUSE_PRESSED){
+		} else if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 //			System.out.println("chon");
 			CONTINUE = true;
 			text.setStyle("-fx-font-size:45");
-		}else {
+		} else {
 			text.setStyle("-fx-font-size:45");
 		}
 	}
