@@ -1,8 +1,9 @@
 # Bomberman Game (clone)
+A game based on Bomberman game. The player must defeat the enemy in the maze and find a hidden portal to progress through levels.
 
 # Contributing
-## [```Vũ Minh Nhật```](https://www.facebook.com/) 
-## [```Đào Trọng Đăng```](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+ [```Vũ Minh Nhật```](https://www.facebook.com/) 
+ [```Đào Trọng Đăng```](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
 ![](diagram.png)
 
